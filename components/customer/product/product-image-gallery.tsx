@@ -46,6 +46,7 @@ export function ProductImageGallery({ images, name }: Props) {
               src={images[activeIndex]}
               alt={`${name} ${activeIndex + 1}`}
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
               priority={activeIndex === 0}
             />
@@ -87,7 +88,7 @@ export function ProductImageGallery({ images, name }: Props) {
                 i === activeIndex ? "border-brand-brown" : "border-transparent opacity-60 hover:opacity-100"
               }`}
             >
-              <Image src={src} alt={`${name} ${i + 1}`} fill className="object-cover" />
+              <Image src={src} alt={`${name} ${i + 1}`} fill sizes="64px" className="object-cover" />
             </button>
           ))}
         </div>
@@ -101,6 +102,7 @@ export function ProductImageGallery({ images, name }: Props) {
               src={images[activeIndex]}
               alt={name}
               fill
+              sizes="(max-width: 1024px) 100vw, 768px"
               className="object-contain"
             />
             {images.length > 1 && (

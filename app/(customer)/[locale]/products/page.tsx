@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { serializeProduct } from "@/lib/utils";
+import { getActiveBrands } from "@/lib/data/brands";
 import type { Product } from "@/types/product";
 import { ProductsClient } from "@/components/customer/product/products-client";
 
@@ -67,27 +68,21 @@ export default async function ProductsPage({
     sort === "featured" ? { isFeatured: "desc" } :
     { createdAt: "desc" };
 
-  const [total, products, categories, brandsRaw] = await Promise.all([
+  const [total, products, categories, brands] = await Promise.all([
     prisma.product.count({ where }),
     prisma.product.findMany({
       where,
       include: {
         categories: { select: { id: true, name: true, nameKu: true, nameAr: true, slug: true, imageUrl: true } },
-        variants: true,
+        variants: { select: { stock: true } },
       },
       orderBy,
       skip: (page - 1) * limit,
       take: limit,
     }),
     prisma.category.findMany({ where: { isActive: true }, orderBy: { sortOrder: "asc" } }),
-    prisma.product.findMany({
-      where: { isActive: true, brand: { not: null } },
-      select: { brand: true },
-      distinct: ["brand"],
-    }),
+    getActiveBrands(),
   ]);
-
-  const brands = brandsRaw.map((b) => b.brand!).filter(Boolean).sort();
 
   return (
     <ProductsClient

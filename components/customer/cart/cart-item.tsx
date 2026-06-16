@@ -27,6 +27,7 @@ export function CartItemRow({ item }: { item: CartItem }) {
             src={item.imageUrl}
             alt={item.name}
             fill
+            sizes="64px"
             className="object-cover"
           />
         ) : (

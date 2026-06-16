@@ -3,6 +3,7 @@
 import { useTranslations, useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import type { Category } from "@/types/product";
 
 type Props = { categories: Category[] };
@@ -51,8 +52,8 @@ export function CategoriesSection({ categories }: Props) {
                   className="block rounded-2xl p-6 text-center transition-all duration-300 group bg-white dark:bg-[#1A000C] border border-gray-100 dark:border-white/7 hover:border-brand-brown/20 dark:hover:border-brand-accent/30 hover:shadow-lg dark:hover:shadow-luxury-hover"
                 >
                   {cat.imageUrl ? (
-                    <div className="w-12 h-12 mx-auto mb-3 rounded-full overflow-hidden ring-2 ring-gray-200 dark:ring-brand-brown/30 group-hover:ring-brand-brown/40 dark:group-hover:ring-brand-accent/50 transition-all">
-                      <img src={cat.imageUrl} alt={localName} className="w-full h-full object-cover" />
+                    <div className="relative w-12 h-12 mx-auto mb-3 rounded-full overflow-hidden ring-2 ring-gray-200 dark:ring-brand-brown/30 group-hover:ring-brand-brown/40 dark:group-hover:ring-brand-accent/50 transition-all">
+                      <Image src={cat.imageUrl} alt={localName} fill sizes="48px" className="object-cover" />
                     </div>
                   ) : (
                     <div className="w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center bg-brand-beige dark:bg-brand-brown/30 transition-all">

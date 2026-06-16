@@ -6,6 +6,8 @@ import { NewArrivalsSection } from "@/components/customer/home/new-arrivals-sect
 import { FeaturedSection } from "@/components/customer/home/featured-section";
 import { CategoriesSection } from "@/components/customer/home/categories-section";
 
+export const revalidate = 60;
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return {
@@ -26,13 +28,13 @@ export default async function HomePage() {
     }),
     prisma.product.findMany({
       where: { isActive: true, isNewArrival: true },
-      include: { categories: { select: { name: true, slug: true } }, variants: true },
+      include: { categories: { select: { name: true, slug: true } }, variants: { select: { stock: true } } },
       orderBy: { createdAt: "desc" },
       take: 8,
     }),
     prisma.product.findMany({
       where: { isActive: true, isFeatured: true },
-      include: { categories: { select: { name: true, slug: true } }, variants: true },
+      include: { categories: { select: { name: true, slug: true } }, variants: { select: { stock: true } } },
       orderBy: { createdAt: "desc" },
       take: 4,
     }),

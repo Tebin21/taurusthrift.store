@@ -78,7 +78,7 @@ export default async function ProductDetailPage({
       isActive: true,
       categories: categoryIds.length > 0 ? { some: { id: { in: categoryIds } } } : undefined,
     },
-    include: { categories: { select: { id: true, name: true, nameKu: true, nameAr: true, slug: true, imageUrl: true } }, variants: true },
+    include: { categories: { select: { id: true, name: true, nameKu: true, nameAr: true, slug: true, imageUrl: true } }, variants: { select: { stock: true } } },
     take: 4,
   });
 

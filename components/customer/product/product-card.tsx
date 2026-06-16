@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
@@ -15,7 +15,7 @@ type Props = {
   product: Product;
 };
 
-export function ProductCard({ product }: Props) {
+export const ProductCard = memo(function ProductCard({ product }: Props) {
   const locale = useLocale();
   const { toggle, has } = useWishlistStore();
   const [mounted, setMounted] = useState(false);
@@ -44,6 +44,7 @@ export function ProductCard({ product }: Props) {
               src={product.thumbnailUrl ?? product.images[0]}
               alt={localizedName}
               fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
@@ -98,4 +99,4 @@ export function ProductCard({ product }: Props) {
       </Link>
     </motion.div>
   );
-}
+});

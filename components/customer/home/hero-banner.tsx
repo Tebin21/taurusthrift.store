@@ -76,6 +76,7 @@ export function HeroBanner({ banners }: Props) {
                 src={banner.imageUrl}
                 alt={banner.title}
                 fill
+                sizes="42vw"
                 className="object-cover"
                 priority
               />
@@ -94,6 +95,7 @@ export function HeroBanner({ banners }: Props) {
               src={banner.imageUrl}
               alt={banner.title}
               fill
+              sizes="100vw"
               className="object-cover opacity-10"
               priority
             />

@@ -50,7 +50,7 @@ export function CartPageClient({ locale }: Props) {
                 <Link href={`/${locale}/products/${item.productId}`} className="shrink-0">
                   <div className="relative w-20 h-24 rounded-2xl overflow-hidden bg-brand-beige dark:bg-muted">
                     {item.imageUrl ? (
-                      <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
+                      <Image src={item.imageUrl} alt={item.name} fill sizes="80px" className="object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-2xl">👗</div>
                     )}

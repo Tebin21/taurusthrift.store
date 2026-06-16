@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { serializeProduct } from "@/lib/utils";
+import { getActiveBrandsForCategory } from "@/lib/data/brands";
 import type { Product } from "@/types/product";
 import { CategoryPageClient } from "@/components/customer/category/category-page-client";
 
@@ -96,26 +97,20 @@ export default async function CategoryPage({
     sort === "price_desc" ? { basePrice: "desc" } :
     { createdAt: "desc" };
 
-  const [total, products, brandsRaw] = await Promise.all([
+  const [total, products, brands] = await Promise.all([
     prisma.product.count({ where }),
     prisma.product.findMany({
       where,
       include: {
         categories: { select: { id: true, name: true, nameKu: true, nameAr: true, slug: true, imageUrl: true } },
-        variants: true,
+        variants: { select: { stock: true } },
       },
       orderBy,
       skip: (page - 1) * limit,
       take: limit,
     }),
-    prisma.product.findMany({
-      where: { isActive: true, categories: { some: { slug } }, brand: { not: null } },
-      select: { brand: true },
-      distinct: ["brand"],
-    }),
+    getActiveBrandsForCategory(slug),
   ]);
-
-  const brands = brandsRaw.map((b) => b.brand!).filter(Boolean).sort();
 
   return (
     <CategoryPageClient
