@@ -54,6 +54,7 @@ model Category {
   updatedAt   DateTime  @updatedAt
   products    Product[]
 
+  @@index([isActive, sortOrder])
   @@map("categories")
 }
 
@@ -83,6 +84,10 @@ model Product {
   variants       ProductVariant[]
   orderItems     OrderItem[]
 
+  @@index([isActive, isFeatured])
+  @@index([isActive, isNewArrival])
+  @@index([isActive, createdAt])
+  @@index([brand])
   @@map("products")
 }
 
@@ -101,6 +106,8 @@ model ProductVariant {
   orderItems OrderItem[]
 
   @@unique([productId, size, color])
+  @@index([productId])
+  @@index([stock])
   @@map("product_variants")
 }
 
@@ -125,6 +132,9 @@ model Order {
   updatedAt       DateTime    @updatedAt
   items           OrderItem[]
 
+  @@index([status])
+  @@index([createdAt])
+  @@index([status, completedAt])
   @@map("orders")
 }
 
@@ -143,6 +153,8 @@ model OrderItem {
   quantity    Int
   createdAt   DateTime        @default(now())
 
+  @@index([orderId])
+  @@index([productId])
   @@map("order_items")
 }
 
@@ -187,19 +199,6 @@ model Banner {
   createdAt  DateTime       @default(now())
   updatedAt  DateTime       @updatedAt
 
+  @@index([isActive, position, sortOrder])
   @@map("banners")
-}
-
-model ContactMessage {
-  id        String   @id @default(cuid())
-  name      String
-  email     String?
-  phone     String?
-  subject   String?
-  message   String
-  locale    String?  @default("en")
-  isRead    Boolean  @default(false)
-  createdAt DateTime @default(now())
-
-  @@map("contact_messages")
 }

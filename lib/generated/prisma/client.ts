@@ -81,8 +81,3 @@ export type Coupon = Prisma.CouponModel
  * 
  */
 export type Banner = Prisma.BannerModel
-/**
- * Model ContactMessage
- * 
- */
-export type ContactMessage = Prisma.ContactMessageModel

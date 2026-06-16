@@ -7,6 +7,8 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"]!,
+    // Migrate/CLI commands need session-mode (advisory locks); the app's runtime
+    // Prisma Client connects separately via DATABASE_URL's transaction-mode pooler.
+    url: process.env["DIRECT_URL"]!,
   },
 });
