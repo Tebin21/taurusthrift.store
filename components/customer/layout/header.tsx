@@ -3,8 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
-import { Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { LanguageSwitcher } from "./language-switcher";
 import { CartButton } from "./cart-button";
@@ -29,8 +27,6 @@ export function CustomerHeader() {
     { href: `/${locale}`, label: t("home") },
     { href: `/${locale}/products`, label: t("products") },
     { href: `/${locale}/categories`, label: t("categories") },
-    { href: `/${locale}/about`, label: t("about") },
-    { href: `/${locale}/contact`, label: t("contact") },
   ];
 
   return (
@@ -78,7 +74,7 @@ export function CustomerHeader() {
             </Link>
 
             {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-7">
+            <nav className="hidden md:flex items-center gap-10">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href || (link.href !== `/${locale}` && pathname.startsWith(link.href));
                 return (
@@ -99,20 +95,10 @@ export function CustomerHeader() {
             </nav>
 
             {/* Right actions */}
-            <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label="Search"
-                asChild
-                className="text-foreground/55 hover:text-foreground hover:bg-brand-brown/10 dark:text-brand-white/55 dark:hover:text-brand-white dark:hover:bg-brand-brown/20"
-              >
-                <Link href={`/${locale}/products`}>
-                  <Search className="h-5 w-5" />
-                </Link>
-              </Button>
+            <div className="flex items-center gap-1.5">
               <LanguageSwitcher />
-              <ThemeToggle />
+              <ThemeToggle className="rounded-full text-foreground/55 hover:text-foreground hover:bg-brand-brown/10 dark:text-brand-white/55 dark:hover:text-brand-white dark:hover:bg-brand-brown/20" />
+              <div className="mx-1 h-5 w-px bg-foreground/10 dark:bg-brand-white/10" />
               <CartButton />
             </div>
           </div>

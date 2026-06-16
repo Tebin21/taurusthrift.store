@@ -2,7 +2,7 @@
 
 import { useLocale } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
-import { Globe } from "lucide-react";
+import { Globe, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { languages } from "@/lib/locales";
+import { cn } from "@/lib/utils";
 
 export function LanguageSwitcher() {
   const locale = useLocale();
@@ -27,19 +28,26 @@ export function LanguageSwitcher() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-sm font-normal hover:bg-muted transition-colors outline-none">
+      <DropdownMenuTrigger
+        className={cn(
+          "inline-flex items-center gap-1.5 h-9 px-3 rounded-full text-sm font-medium tracking-wide transition-colors outline-none",
+          "text-foreground/55 hover:text-foreground hover:bg-brand-brown/10 dark:text-brand-white/55 dark:hover:text-brand-white dark:hover:bg-brand-brown/20"
+        )}
+      >
         <Globe className="h-4 w-4" />
-        <span className="hidden sm:inline">{current?.label}</span>
-        <span className="sm:hidden">{current?.flag}</span>
+        <span className="uppercase">{current?.code}</span>
+        <ChevronDown className="h-3 w-3 opacity-60" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="min-w-32">
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
             onClick={() => switchLocale(lang.code)}
-            className={locale === lang.code ? "bg-brand-brown/8 text-brand-brown font-medium" : ""}
+            className={cn(
+              "text-sm",
+              locale === lang.code && "bg-brand-brown/8 text-brand-brown font-medium dark:bg-brand-accent/15 dark:text-brand-accent"
+            )}
           >
-            <span className="me-2">{lang.flag}</span>
             {lang.label}
           </DropdownMenuItem>
         ))}
