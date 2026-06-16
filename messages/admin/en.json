@@ -44,7 +44,6 @@
     "banners": "Banners",
     "customers": "Customers",
     "reports": "Reports",
-    "messages": "Messages",
     "settings": "Settings",
     "signOut": "Sign out",
     "toggleNavigation": "Toggle navigation"
@@ -68,7 +67,6 @@
     "pendingOrders": "Pending Orders",
     "thisMonth": "{value} this month",
     "lowStockVariants": "{count} variants low stock",
-    "unreadMessages": "{count} unread messages",
     "recentOrders": "Recent Orders",
     "noOrdersYet": "No orders yet",
     "accounting": {
@@ -152,6 +150,7 @@
       "noVariants": "No variants added. Add at least one to track stock.",
       "size": "Size",
       "color": "Color",
+      "colorPlaceholder": "Black",
       "colorHex": "Color Hex",
       "sku": "SKU",
       "stock": "Stock *",
@@ -310,7 +309,8 @@
     },
     "toast": {
       "saved": "Banner saved",
-      "saveFailed": "Failed to save banner"
+      "saveFailed": "Failed to save banner",
+      "imageRequired": "Please upload a banner image"
     }
   },
   "customers": {
@@ -341,16 +341,6 @@
     "left": "{count} left",
     "noLowStock": "No low stock items"
   },
-  "messagesPage": {
-    "title": "Contact Messages",
-    "unreadOfTotal": "{unread} unread of {total} total",
-    "empty": "No messages yet",
-    "new": "New",
-    "showLess": "Show less",
-    "showMore": "Show more",
-    "markRead": "Mark read",
-    "markReadFailed": "Failed to mark as read"
-  },
   "deleteDialog": {
     "title": "Delete {label}?",
     "body": "This action cannot be undone.",
@@ -364,6 +354,21 @@
     "languageHint": "Choose your preferred admin interface language.",
     "account": "Account",
     "name": "Name",
-    "email": "Email"
+    "email": "Email",
+    "accountSettingsTitle": "Account Settings",
+    "newEmail": "New Email",
+    "newEmailPlaceholder": "new@email.com",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "accountUpdated": "Account settings updated",
+    "invalidEmail": "Enter a valid email address",
+    "emailConflict": "Email already in use",
+    "passwordMismatch": "Passwords do not match",
+    "saveFailed": "Failed to update account settings",
+    "noChanges": "Enter a new email or password to save",
+    "logoutHint": "End your current admin session on this device.",
+    "logout": "Log Out"
   }
 }

@@ -44,7 +44,6 @@
     "banners": "اللافتات",
     "customers": "العملاء",
     "reports": "التقارير",
-    "messages": "الرسائل",
     "settings": "الإعدادات",
     "signOut": "تسجيل الخروج",
     "toggleNavigation": "فتح قائمة التنقل"
@@ -68,7 +67,6 @@
     "pendingOrders": "الطلبات المعلّقة",
     "thisMonth": "{value} هذا الشهر",
     "lowStockVariants": "{count} نوع بمخزون منخفض",
-    "unreadMessages": "{count} رسالة غير مقروءة",
     "recentOrders": "الطلبات الأخيرة",
     "noOrdersYet": "لا توجد طلبات بعد",
     "accounting": {
@@ -152,6 +150,7 @@
       "noVariants": "لم تتم إضافة أي نوع. أضف نوعاً واحداً على الأقل لتتبع المخزون.",
       "size": "المقاس",
       "color": "اللون",
+      "colorPlaceholder": "أسود",
       "colorHex": "كود اللون",
       "sku": "رمز SKU",
       "stock": "المخزون *",
@@ -310,7 +309,8 @@
     },
     "toast": {
       "saved": "تم حفظ اللافتة",
-      "saveFailed": "فشل حفظ اللافتة"
+      "saveFailed": "فشل حفظ اللافتة",
+      "imageRequired": "يرجى تحميل صورة اللافتة"
     }
   },
   "customers": {
@@ -341,16 +341,6 @@
     "left": "{count} متبقٍ",
     "noLowStock": "لا توجد عناصر بمخزون منخفض"
   },
-  "messagesPage": {
-    "title": "رسائل التواصل",
-    "unreadOfTotal": "{unread} غير مقروءة من {total} إجمالاً",
-    "empty": "لا توجد رسائل بعد",
-    "new": "جديد",
-    "showLess": "عرض أقل",
-    "showMore": "عرض أكثر",
-    "markRead": "وضع علامة مقروءة",
-    "markReadFailed": "فشل وضع علامة مقروءة"
-  },
   "deleteDialog": {
     "title": "حذف {label}؟",
     "body": "لا يمكن التراجع عن هذا الإجراء.",
@@ -364,6 +354,21 @@
     "languageHint": "اختر لغة واجهة الإدارة المفضّلة لديك.",
     "account": "الحساب",
     "name": "الاسم",
-    "email": "البريد الإلكتروني"
+    "email": "البريد الإلكتروني",
+    "accountSettingsTitle": "إعدادات الحساب",
+    "newEmail": "البريد الإلكتروني الجديد",
+    "newEmailPlaceholder": "new@email.com",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "saveChanges": "حفظ التغييرات",
+    "saving": "جارٍ الحفظ...",
+    "accountUpdated": "تم تحديث إعدادات الحساب",
+    "invalidEmail": "أدخل بريدًا إلكترونيًا صالحًا",
+    "emailConflict": "هذا البريد الإلكتروني مستخدم بالفعل",
+    "passwordMismatch": "كلمتا المرور غير متطابقتين",
+    "saveFailed": "فشل تحديث إعدادات الحساب",
+    "noChanges": "أدخل بريدًا إلكترونيًا أو كلمة مرور جديدة للحفظ",
+    "logoutHint": "إنهاء جلسة الإدارة الحالية على هذا الجهاز.",
+    "logout": "تسجيل الخروج"
   }
 }
