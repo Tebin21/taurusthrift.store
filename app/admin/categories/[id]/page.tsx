@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,11 +17,12 @@ import Link from "next/link";
 export default function CategoryFormPage() {
   const router = useRouter();
   const params = useParams();
+  const pathname = usePathname();
   const t = useTranslations("categories");
   const tForm = useTranslations("categories.form");
   const tToast = useTranslations("categories.toast");
   const tCommon = useTranslations("common");
-  const isNew = params.id === "new";
+  const isNew = pathname.endsWith("/new");
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [form, setForm] = useState({

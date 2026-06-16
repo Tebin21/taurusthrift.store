@@ -32,6 +32,9 @@ export async function POST(req: NextRequest) {
     if (!session) return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
 
     const body = await req.json();
+    if (!body.imageUrl) {
+      return NextResponse.json({ success: false, error: "Image is required" }, { status: 400 });
+    }
     const banner = await prisma.banner.create({ data: body });
 
     return NextResponse.json({ success: true, data: banner }, { status: 201 });

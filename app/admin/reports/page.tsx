@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatPrice } from "@/lib/utils/currency";
@@ -5,6 +6,8 @@ import { formatPrice } from "@/lib/utils/currency";
 export const metadata = { title: "Reports" };
 
 export default async function AdminReportsPage() {
+  const t = await getTranslations("reports");
+  const tCommon = await getTranslations("common");
   const now = new Date();
 
   // Last 6 months data
@@ -52,22 +55,22 @@ export default async function AdminReportsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Sales Reports</h1>
-        <p className="text-muted-foreground">Performance overview for the last 6 months</p>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
 
       {/* Monthly table */}
       <Card>
-        <CardHeader><CardTitle className="text-base">Monthly Revenue</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-base">{t("monthlyRevenue")}</CardTitle></CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="border-b border-border">
                 <tr>
-                  <th className="text-start py-2 font-medium text-muted-foreground">Month</th>
-                  <th className="text-start py-2 font-medium text-muted-foreground">Orders</th>
-                  <th className="text-start py-2 font-medium text-muted-foreground">Revenue</th>
-                  <th className="text-start py-2 font-medium text-muted-foreground">Avg Order</th>
+                  <th className="text-start py-2 font-medium text-muted-foreground">{t("table.month")}</th>
+                  <th className="text-start py-2 font-medium text-muted-foreground">{t("table.orders")}</th>
+                  <th className="text-start py-2 font-medium text-muted-foreground">{t("table.revenue")}</th>
+                  <th className="text-start py-2 font-medium text-muted-foreground">{t("table.avgOrder")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -76,7 +79,7 @@ export default async function AdminReportsPage() {
                     <td className="py-2 font-medium">{m.label}</td>
                     <td className="py-2">{m.orders}</td>
                     <td className="py-2 font-semibold text-brand-brown">{formatPrice(m.revenue)}</td>
-                    <td className="py-2 text-muted-foreground">{m.orders > 0 ? formatPrice(m.revenue / m.orders) : "—"}</td>
+                    <td className="py-2 text-muted-foreground">{m.orders > 0 ? formatPrice(m.revenue / m.orders) : tCommon("none")}</td>
                   </tr>
                 ))}
               </tbody>
@@ -88,7 +91,7 @@ export default async function AdminReportsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Top products */}
         <Card>
-          <CardHeader><CardTitle className="text-base">Top Selling Products</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-base">{t("topSelling")}</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-2">
               {topProducts.map((p: any, i: number) => (
@@ -97,17 +100,17 @@ export default async function AdminReportsPage() {
                     <span className="w-5 text-muted-foreground text-xs">{i + 1}.</span>
                     <span className="truncate max-w-[180px]">{p.productName}</span>
                   </div>
-                  <span className="text-muted-foreground shrink-0">{p._sum.quantity} sold</span>
+                  <span className="text-muted-foreground shrink-0">{t("sold", { count: p._sum.quantity ?? 0 })}</span>
                 </div>
               ))}
-              {topProducts.length === 0 && <p className="text-muted-foreground text-sm">No sales data yet</p>}
+              {topProducts.length === 0 && <p className="text-muted-foreground text-sm">{t("noSalesData")}</p>}
             </div>
           </CardContent>
         </Card>
 
         {/* Low stock */}
         <Card>
-          <CardHeader><CardTitle className="text-base">Low Stock Alert</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-base">{t("lowStockAlert")}</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-2">
               {lowStock.map((v: any) => (
@@ -119,11 +122,11 @@ export default async function AdminReportsPage() {
                     )}
                   </div>
                   <span className={`font-semibold ${v.stock <= 2 ? "text-red-500" : "text-orange-500"}`}>
-                    {v.stock} left
+                    {t("left", { count: v.stock })}
                   </span>
                 </div>
               ))}
-              {lowStock.length === 0 && <p className="text-muted-foreground text-sm">No low stock items</p>}
+              {lowStock.length === 0 && <p className="text-muted-foreground text-sm">{t("noLowStock")}</p>}
             </div>
           </CardContent>
         </Card>

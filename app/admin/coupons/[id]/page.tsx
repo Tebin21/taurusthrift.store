@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,11 +18,12 @@ import { roundToIQD } from "@/lib/utils/currency";
 export default function CouponFormPage() {
   const router = useRouter();
   const params = useParams();
+  const pathname = usePathname();
   const t = useTranslations("coupons");
   const tForm = useTranslations("coupons.form");
   const tToast = useTranslations("coupons.toast");
   const tCommon = useTranslations("common");
-  const isNew = params.id === "new";
+  const isNew = pathname.endsWith("/new");
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     code: "",
