@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -42,21 +43,23 @@ export async function AdminTopbar() {
             <span className="text-sm hidden sm:block">{session?.user?.name ?? t("adminPanel")}</span>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>{session?.user?.email}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:text-destructive">
-              <form
-                action={async () => {
-                  "use server";
-                  await signOut({ redirectTo: "/admin/login" });
-                }}
-              >
-                <button type="submit" className="flex w-full items-center gap-2">
-                  <LogOut className="h-4 w-4" />
-                  {t("signOut")}
-                </button>
-              </form>
-            </DropdownMenuItem>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>{session?.user?.email}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="text-destructive focus:text-destructive">
+                <form
+                  action={async () => {
+                    "use server";
+                    await signOut({ redirectTo: "/admin/login" });
+                  }}
+                >
+                  <button type="submit" className="flex w-full items-center gap-2">
+                    <LogOut className="h-4 w-4" />
+                    {t("signOut")}
+                  </button>
+                </form>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
