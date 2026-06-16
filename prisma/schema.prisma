@@ -1,0 +1,205 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+enum BannerPosition {
+  HERO
+  SECONDARY
+  PROMOTIONAL
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("ADMIN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  nameKu      String?
+  nameAr      String?
+  slug        String    @unique
+  description String?
+  imageUrl    String?
+  isActive    Boolean   @default(true)
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id             String           @id @default(cuid())
+  name           String
+  nameKu         String?
+  nameAr         String?
+  slug           String           @unique
+  description    String?
+  descriptionKu  String?
+  descriptionAr  String?
+  basePrice      Int
+  compareAtPrice Int?
+  images         String[]
+  thumbnailUrl   String?
+  isActive       Boolean          @default(true)
+  isFeatured     Boolean          @default(false)
+  isNewArrival   Boolean          @default(false)
+  tags           String[]
+  material       String?
+  brand          String?
+  condition      String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  categories     Category[]
+  variants       ProductVariant[]
+  orderItems     OrderItem[]
+
+  @@map("products")
+}
+
+model ProductVariant {
+  id         String      @id @default(cuid())
+  productId  String
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size       String?
+  color      String?
+  colorHex   String?
+  sku        String?     @unique
+  stock      Int         @default(0)
+  price      Int?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  orderItems OrderItem[]
+
+  @@unique([productId, size, color])
+  @@map("product_variants")
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique
+  status          OrderStatus @default(PENDING)
+  customerName    String
+  customerPhone   String
+  customerAddress String
+  customerCity    String?
+  customerNotes   String?
+  subtotal        Int
+  discountAmount  Int         @default(0)
+  total           Int
+  couponId        String?
+  coupon          Coupon?     @relation(fields: [couponId], references: [id])
+  couponCode      String?
+  locale          String?     @default("en")
+  completedAt     DateTime?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  items           OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id          String          @id @default(cuid())
+  orderId     String
+  order       Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product         @relation(fields: [productId], references: [id])
+  variantId   String?
+  variant     ProductVariant? @relation(fields: [variantId], references: [id])
+  productName String
+  variantInfo String?
+  imageUrl    String?
+  price       Int
+  quantity    Int
+  createdAt   DateTime        @default(now())
+
+  @@map("order_items")
+}
+
+model Coupon {
+  id              String       @id @default(cuid())
+  code            String       @unique
+  description     String?
+  discountType    DiscountType @default(PERCENTAGE)
+  discountValue   Int
+  minimumOrder    Int?
+  maximumDiscount Int?
+  usageLimit      Int?
+  usageCount      Int          @default(0)
+  isActive        Boolean      @default(true)
+  startsAt        DateTime?
+  expiresAt       DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  orders          Order[]
+
+  @@map("coupons")
+}
+
+model Banner {
+  id         String         @id @default(cuid())
+  title      String
+  titleKu    String?
+  titleAr    String?
+  subtitle   String?
+  subtitleKu String?
+  subtitleAr String?
+  imageUrl   String
+  linkUrl    String?
+  linkText   String?
+  linkTextKu String?
+  linkTextAr String?
+  position   BannerPosition @default(HERO)
+  sortOrder  Int            @default(0)
+  isActive   Boolean        @default(true)
+  startsAt   DateTime?
+  expiresAt  DateTime?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@map("banners")
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  subject   String?
+  message   String
+  locale    String?  @default("en")
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("contact_messages")
+}
