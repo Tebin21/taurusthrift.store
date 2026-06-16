@@ -1,19 +1,8 @@
-import { Package, ShoppingCart, TrendingUp, DollarSign, AlertTriangle, Mail } from "lucide-react";
+import { Package, ShoppingCart, TrendingUp, DollarSign, AlertTriangle } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils/currency";
-
-async function fetchStats() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const res = await fetch(`${baseUrl}/api/dashboard/stats`, {
-    cache: "no-store",
-    headers: { Cookie: "" },
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.data;
-}
 
 export async function DashboardStats() {
   const t = await getTranslations("dashboard");
@@ -33,7 +22,6 @@ export async function DashboardStats() {
     monthlyRevenueResult,
     lastMonthRevenueResult,
     lowStockVariants,
-    unreadMessages,
   ] = await Promise.all([
     prisma.order.count(),
     prisma.order.count({ where: { status: "PENDING" } }),
@@ -53,7 +41,6 @@ export async function DashboardStats() {
       },
     }),
     prisma.productVariant.count({ where: { stock: { gt: 0, lte: 3 } } }),
-    prisma.contactMessage.count({ where: { isRead: false } }),
   ]);
 
   const totalRevenue = Number(revenueResult._sum.total ?? 0);
@@ -96,7 +83,6 @@ export async function DashboardStats() {
     {
       title: t("pendingOrders"),
       value: pendingOrders.toString(),
-      sub: t("unreadMessages", { count: unreadMessages }),
       icon: AlertTriangle,
       color: pendingOrders > 0 ? "text-orange-600" : "text-muted-foreground",
       iconBg: pendingOrders > 0 ? "bg-orange-50 dark:bg-orange-950/30" : "bg-muted",
@@ -120,7 +106,7 @@ export async function DashboardStats() {
             <CardContent>
               <div className="text-2xl font-bold tracking-tight">{stat.value}</div>
               <div className="flex items-center gap-2 mt-1.5">
-                <p className="text-xs text-muted-foreground">{stat.sub}</p>
+                {stat.sub && <p className="text-xs text-muted-foreground">{stat.sub}</p>}
                 {stat.growth !== undefined && (
                   <Badge
                     variant="outline"

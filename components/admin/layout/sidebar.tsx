@@ -13,7 +13,6 @@ import {
   ImageIcon,
   Users,
   BarChart3,
-  MessageSquare,
   Settings,
   ChevronLeft,
   ChevronRight,
@@ -32,7 +31,6 @@ const navItems = [
   { href: "/admin/banners", labelKey: "banners", icon: ImageIcon },
   { href: "/admin/customers", labelKey: "customers", icon: Users },
   { href: "/admin/reports", labelKey: "reports", icon: BarChart3 },
-  { href: "/admin/messages", labelKey: "messages", icon: MessageSquare },
   { href: "/admin/settings", labelKey: "settings", icon: Settings },
 ] as const;
 

@@ -24,7 +24,6 @@ export async function GET() {
       lastMonthRevenueResult,
       recentOrders,
       lowStockVariants,
-      unreadMessages,
     ] = await Promise.all([
       prisma.order.count(),
       prisma.order.count({ where: { status: "PENDING" } }),
@@ -56,7 +55,6 @@ export async function GET() {
         include: { items: true },
       }),
       prisma.productVariant.count({ where: { stock: { gt: 0, lte: 3 } } }),
-      prisma.contactMessage.count({ where: { isRead: false } }),
     ]);
 
     const totalRevenue = Number(revenueResult._sum.total ?? 0);
@@ -85,7 +83,6 @@ export async function GET() {
         orderGrowth: Math.round(orderGrowth * 10) / 10,
         recentOrders,
         lowStockVariants,
-        unreadMessages,
       },
     });
   } catch (error) {

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
-import { Home, ShoppingBag, LayoutGrid, Info, Phone } from "lucide-react";
+import { Home, ShoppingBag, LayoutGrid } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -16,17 +16,15 @@ export function MobileBottomNav() {
     { href: `/${locale}`, label: t("home"), icon: Home },
     { href: `/${locale}/products`, label: t("products"), icon: ShoppingBag },
     { href: `/${locale}/categories`, label: t("categories"), icon: LayoutGrid },
-    { href: `/${locale}/about`, label: t("about"), icon: Info },
-    { href: `/${locale}/contact`, label: t("contact"), icon: Phone },
   ];
 
   return (
     <nav
       aria-label="Mobile navigation"
-      className="md:hidden fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-50"
+      className="md:hidden fixed left-1/2 -translate-x-1/2 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-50 w-fit max-w-[calc(100%-2rem)]"
     >
       <div
-        className="flex items-center justify-between gap-1 rounded-full border backdrop-blur-xl px-2 py-2"
+        className="flex items-center justify-center gap-2 rounded-full border backdrop-blur-xl px-3 py-2"
         style={{
           background: "var(--bottom-nav-bg)",
           borderColor: "var(--bottom-nav-border)",
