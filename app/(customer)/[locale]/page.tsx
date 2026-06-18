@@ -24,7 +24,7 @@ export default async function HomePage() {
     prisma.banner.findMany({
       where: { isActive: true, position: "HERO" },
       orderBy: { sortOrder: "asc" },
-      take: 3,
+      take: 5,
     }),
     prisma.product.findMany({
       where: { isActive: true, isNewArrival: true },

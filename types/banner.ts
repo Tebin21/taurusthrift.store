@@ -8,7 +8,8 @@ export type Banner = {
   subtitle?: string | null;
   subtitleKu?: string | null;
   subtitleAr?: string | null;
-  imageUrl: string;
+  imageUrl?: string | null;
+  imageUrls: string[];
   linkUrl?: string | null;
   linkText?: string | null;
   linkTextKu?: string | null;

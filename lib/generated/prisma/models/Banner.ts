@@ -87,6 +87,7 @@ export type BannerCountAggregateOutputType = {
   subtitleKu: number
   subtitleAr: number
   imageUrl: number
+  imageUrls: number
   linkUrl: number
   linkText: number
   linkTextKu: number
@@ -163,6 +164,7 @@ export type BannerCountAggregateInputType = {
   subtitleKu?: true
   subtitleAr?: true
   imageUrl?: true
+  imageUrls?: true
   linkUrl?: true
   linkText?: true
   linkTextKu?: true
@@ -271,7 +273,8 @@ export type BannerGroupByOutputType = {
   subtitle: string | null
   subtitleKu: string | null
   subtitleAr: string | null
-  imageUrl: string
+  imageUrl: string | null
+  imageUrls: string[]
   linkUrl: string | null
   linkText: string | null
   linkTextKu: string | null
@@ -316,7 +319,8 @@ export type BannerWhereInput = {
   subtitle?: Prisma.StringNullableFilter<"Banner"> | string | null
   subtitleKu?: Prisma.StringNullableFilter<"Banner"> | string | null
   subtitleAr?: Prisma.StringNullableFilter<"Banner"> | string | null
-  imageUrl?: Prisma.StringFilter<"Banner"> | string
+  imageUrl?: Prisma.StringNullableFilter<"Banner"> | string | null
+  imageUrls?: Prisma.StringNullableListFilter<"Banner">
   linkUrl?: Prisma.StringNullableFilter<"Banner"> | string | null
   linkText?: Prisma.StringNullableFilter<"Banner"> | string | null
   linkTextKu?: Prisma.StringNullableFilter<"Banner"> | string | null
@@ -338,7 +342,8 @@ export type BannerOrderByWithRelationInput = {
   subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
   subtitleKu?: Prisma.SortOrderInput | Prisma.SortOrder
   subtitleAr?: Prisma.SortOrderInput | Prisma.SortOrder
-  imageUrl?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageUrls?: Prisma.SortOrder
   linkUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   linkText?: Prisma.SortOrderInput | Prisma.SortOrder
   linkTextKu?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -363,7 +368,8 @@ export type BannerWhereUniqueInput = Prisma.AtLeast<{
   subtitle?: Prisma.StringNullableFilter<"Banner"> | string | null
   subtitleKu?: Prisma.StringNullableFilter<"Banner"> | string | null
   subtitleAr?: Prisma.StringNullableFilter<"Banner"> | string | null
-  imageUrl?: Prisma.StringFilter<"Banner"> | string
+  imageUrl?: Prisma.StringNullableFilter<"Banner"> | string | null
+  imageUrls?: Prisma.StringNullableListFilter<"Banner">
   linkUrl?: Prisma.StringNullableFilter<"Banner"> | string | null
   linkText?: Prisma.StringNullableFilter<"Banner"> | string | null
   linkTextKu?: Prisma.StringNullableFilter<"Banner"> | string | null
@@ -385,7 +391,8 @@ export type BannerOrderByWithAggregationInput = {
   subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
   subtitleKu?: Prisma.SortOrderInput | Prisma.SortOrder
   subtitleAr?: Prisma.SortOrderInput | Prisma.SortOrder
-  imageUrl?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageUrls?: Prisma.SortOrder
   linkUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   linkText?: Prisma.SortOrderInput | Prisma.SortOrder
   linkTextKu?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -415,7 +422,8 @@ export type BannerScalarWhereWithAggregatesInput = {
   subtitle?: Prisma.StringNullableWithAggregatesFilter<"Banner"> | string | null
   subtitleKu?: Prisma.StringNullableWithAggregatesFilter<"Banner"> | string | null
   subtitleAr?: Prisma.StringNullableWithAggregatesFilter<"Banner"> | string | null
-  imageUrl?: Prisma.StringWithAggregatesFilter<"Banner"> | string
+  imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Banner"> | string | null
+  imageUrls?: Prisma.StringNullableListFilter<"Banner">
   linkUrl?: Prisma.StringNullableWithAggregatesFilter<"Banner"> | string | null
   linkText?: Prisma.StringNullableWithAggregatesFilter<"Banner"> | string | null
   linkTextKu?: Prisma.StringNullableWithAggregatesFilter<"Banner"> | string | null
@@ -437,7 +445,8 @@ export type BannerCreateInput = {
   subtitle?: string | null
   subtitleKu?: string | null
   subtitleAr?: string | null
-  imageUrl: string
+  imageUrl?: string | null
+  imageUrls?: Prisma.BannerCreateimageUrlsInput | string[]
   linkUrl?: string | null
   linkText?: string | null
   linkTextKu?: string | null
@@ -459,7 +468,8 @@ export type BannerUncheckedCreateInput = {
   subtitle?: string | null
   subtitleKu?: string | null
   subtitleAr?: string | null
-  imageUrl: string
+  imageUrl?: string | null
+  imageUrls?: Prisma.BannerCreateimageUrlsInput | string[]
   linkUrl?: string | null
   linkText?: string | null
   linkTextKu?: string | null
@@ -481,7 +491,8 @@ export type BannerUpdateInput = {
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitleKu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitleAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrls?: Prisma.BannerUpdateimageUrlsInput | string[]
   linkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkTextKu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -503,7 +514,8 @@ export type BannerUncheckedUpdateInput = {
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitleKu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitleAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrls?: Prisma.BannerUpdateimageUrlsInput | string[]
   linkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkTextKu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -525,7 +537,8 @@ export type BannerCreateManyInput = {
   subtitle?: string | null
   subtitleKu?: string | null
   subtitleAr?: string | null
-  imageUrl: string
+  imageUrl?: string | null
+  imageUrls?: Prisma.BannerCreateimageUrlsInput | string[]
   linkUrl?: string | null
   linkText?: string | null
   linkTextKu?: string | null
@@ -547,7 +560,8 @@ export type BannerUpdateManyMutationInput = {
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitleKu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitleAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrls?: Prisma.BannerUpdateimageUrlsInput | string[]
   linkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkTextKu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -569,7 +583,8 @@ export type BannerUncheckedUpdateManyInput = {
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitleKu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtitleAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrls?: Prisma.BannerUpdateimageUrlsInput | string[]
   linkUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkTextKu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -592,6 +607,7 @@ export type BannerCountOrderByAggregateInput = {
   subtitleKu?: Prisma.SortOrder
   subtitleAr?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  imageUrls?: Prisma.SortOrder
   linkUrl?: Prisma.SortOrder
   linkText?: Prisma.SortOrder
   linkTextKu?: Prisma.SortOrder
@@ -657,6 +673,15 @@ export type BannerSumOrderByAggregateInput = {
   sortOrder?: Prisma.SortOrder
 }
 
+export type BannerCreateimageUrlsInput = {
+  set: string[]
+}
+
+export type BannerUpdateimageUrlsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
 export type EnumBannerPositionFieldUpdateOperationsInput = {
   set?: $Enums.BannerPosition
 }
@@ -672,6 +697,7 @@ export type BannerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   subtitleKu?: boolean
   subtitleAr?: boolean
   imageUrl?: boolean
+  imageUrls?: boolean
   linkUrl?: boolean
   linkText?: boolean
   linkTextKu?: boolean
@@ -694,6 +720,7 @@ export type BannerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   subtitleKu?: boolean
   subtitleAr?: boolean
   imageUrl?: boolean
+  imageUrls?: boolean
   linkUrl?: boolean
   linkText?: boolean
   linkTextKu?: boolean
@@ -716,6 +743,7 @@ export type BannerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   subtitleKu?: boolean
   subtitleAr?: boolean
   imageUrl?: boolean
+  imageUrls?: boolean
   linkUrl?: boolean
   linkText?: boolean
   linkTextKu?: boolean
@@ -738,6 +766,7 @@ export type BannerSelectScalar = {
   subtitleKu?: boolean
   subtitleAr?: boolean
   imageUrl?: boolean
+  imageUrls?: boolean
   linkUrl?: boolean
   linkText?: boolean
   linkTextKu?: boolean
@@ -751,7 +780,7 @@ export type BannerSelectScalar = {
   updatedAt?: boolean
 }
 
-export type BannerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "titleKu" | "titleAr" | "subtitle" | "subtitleKu" | "subtitleAr" | "imageUrl" | "linkUrl" | "linkText" | "linkTextKu" | "linkTextAr" | "position" | "sortOrder" | "isActive" | "startsAt" | "expiresAt" | "createdAt" | "updatedAt", ExtArgs["result"]["banner"]>
+export type BannerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "titleKu" | "titleAr" | "subtitle" | "subtitleKu" | "subtitleAr" | "imageUrl" | "imageUrls" | "linkUrl" | "linkText" | "linkTextKu" | "linkTextAr" | "position" | "sortOrder" | "isActive" | "startsAt" | "expiresAt" | "createdAt" | "updatedAt", ExtArgs["result"]["banner"]>
 
 export type $BannerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Banner"
@@ -764,7 +793,8 @@ export type $BannerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     subtitle: string | null
     subtitleKu: string | null
     subtitleAr: string | null
-    imageUrl: string
+    imageUrl: string | null
+    imageUrls: string[]
     linkUrl: string | null
     linkText: string | null
     linkTextKu: string | null
@@ -1207,6 +1237,7 @@ export interface BannerFieldRefs {
   readonly subtitleKu: Prisma.FieldRef<"Banner", 'String'>
   readonly subtitleAr: Prisma.FieldRef<"Banner", 'String'>
   readonly imageUrl: Prisma.FieldRef<"Banner", 'String'>
+  readonly imageUrls: Prisma.FieldRef<"Banner", 'String[]'>
   readonly linkUrl: Prisma.FieldRef<"Banner", 'String'>
   readonly linkText: Prisma.FieldRef<"Banner", 'String'>
   readonly linkTextKu: Prisma.FieldRef<"Banner", 'String'>

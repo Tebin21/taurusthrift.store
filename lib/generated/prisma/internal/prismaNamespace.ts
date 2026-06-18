@@ -1183,6 +1183,7 @@ export const BannerScalarFieldEnum = {
   subtitleKu: 'subtitleKu',
   subtitleAr: 'subtitleAr',
   imageUrl: 'imageUrl',
+  imageUrls: 'imageUrls',
   linkUrl: 'linkUrl',
   linkText: 'linkText',
   linkTextKu: 'linkTextKu',

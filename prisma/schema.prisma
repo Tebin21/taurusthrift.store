@@ -186,7 +186,8 @@ model Banner {
   subtitle   String?
   subtitleKu String?
   subtitleAr String?
-  imageUrl   String
+  imageUrl   String?
+  imageUrls  String[]
   linkUrl    String?
   linkText   String?
   linkTextKu String?

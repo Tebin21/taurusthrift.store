@@ -24,7 +24,7 @@ export default function BannerFormPage() {
   const tCommon = useTranslations("common");
   const isNew = pathname.endsWith("/new");
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [form, setForm] = useState({
     title: "", titleKu: "", titleAr: "",
     subtitle: "", subtitleKu: "", subtitleAr: "",
@@ -41,13 +41,14 @@ export default function BannerFormPage() {
           if (data.success) {
             const b = data.data.find((b: { id: string }) => b.id === params.id);
             if (b) {
-              const { imageUrl: img, ...rest } = b;
+              const { imageUrl, imageUrls: imgs, ...rest } = b;
               setForm({
                 ...rest,
                 startsAt: b.startsAt ? new Date(b.startsAt).toISOString().slice(0, 10) : "",
                 expiresAt: b.expiresAt ? new Date(b.expiresAt).toISOString().slice(0, 10) : "",
               });
-              if (img) setImageUrl([img]);
+              if (imgs && imgs.length > 0) setImageUrls(imgs);
+              else if (imageUrl) setImageUrls([imageUrl]);
             }
           }
         });
@@ -56,7 +57,7 @@ export default function BannerFormPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!imageUrl[0]) {
+    if (imageUrls.length === 0) {
       toast.error(tToast("imageRequired"));
       return;
     }
@@ -64,7 +65,7 @@ export default function BannerFormPage() {
     try {
       const payload = {
         ...form,
-        imageUrl: imageUrl[0],
+        imageUrls,
         startsAt: form.startsAt || null,
         expiresAt: form.expiresAt || null,
       };
@@ -91,9 +92,9 @@ export default function BannerFormPage() {
           <CardHeader><CardTitle className="text-base">{tForm("image")}</CardTitle></CardHeader>
           <CardContent>
             <ImageUpload
-              value={imageUrl}
-              onChange={setImageUrl}
-              max={1}
+              value={imageUrls}
+              onChange={setImageUrls}
+              max={5}
               label={tForm("imageLabel")}
             />
           </CardContent>

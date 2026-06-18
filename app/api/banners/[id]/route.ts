@@ -12,7 +12,35 @@ export async function PUT(
 
     const { id } = await params;
     const body = await req.json();
-    const banner = await prisma.banner.update({ where: { id }, data: body });
+
+    const imageUrls: string[] | undefined =
+      Array.isArray(body.imageUrls) && body.imageUrls.length > 0
+        ? (body.imageUrls as string[]).slice(0, 5)
+        : body.imageUrl
+        ? [String(body.imageUrl)]
+        : undefined;
+
+    const banner = await prisma.banner.update({
+      where: { id },
+      data: {
+        title: String(body.title ?? ""),
+        titleKu: body.titleKu || null,
+        titleAr: body.titleAr || null,
+        subtitle: body.subtitle || null,
+        subtitleKu: body.subtitleKu || null,
+        subtitleAr: body.subtitleAr || null,
+        ...(imageUrls && { imageUrl: imageUrls[0], imageUrls }),
+        linkUrl: body.linkUrl || null,
+        linkText: body.linkText || null,
+        linkTextKu: body.linkTextKu || null,
+        linkTextAr: body.linkTextAr || null,
+        position: body.position,
+        sortOrder: Number(body.sortOrder) || 0,
+        isActive: Boolean(body.isActive ?? true),
+        startsAt: body.startsAt ? new Date(body.startsAt) : null,
+        expiresAt: body.expiresAt ? new Date(body.expiresAt) : null,
+      },
+    });
 
     return NextResponse.json({ success: true, data: banner });
   } catch (error) {

@@ -29,9 +29,14 @@ export default async function AdminBannersPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {banners.map((banner: any) => (
           <div key={banner.id} className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-md transition-shadow">
-            {banner.imageUrl && (
+            {(banner.imageUrls?.[0] ?? banner.imageUrl) && (
               <div className="relative h-40 bg-muted">
-                <Image src={banner.imageUrl} alt={banner.title} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+                <Image src={banner.imageUrls?.[0] ?? banner.imageUrl} alt={banner.title} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+                {(banner.imageUrls?.length ?? 0) > 1 && (
+                  <span className="absolute bottom-2 end-2 text-xs bg-black/60 text-white px-1.5 py-0.5 rounded">
+                    {banner.imageUrls.length} photos
+                  </span>
+                )}
               </div>
             )}
             <div className="p-4">
