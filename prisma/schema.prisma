@@ -179,27 +179,25 @@ model Coupon {
 }
 
 model Banner {
-  id         String         @id @default(cuid())
-  title      String
-  titleKu    String?
-  titleAr    String?
-  subtitle   String?
-  subtitleKu String?
-  subtitleAr String?
-  imageUrl   String?
-  imageUrls  String[]
-  linkUrl    String?
-  linkText   String?
-  linkTextKu String?
-  linkTextAr String?
-  position   BannerPosition @default(HERO)
-  sortOrder  Int            @default(0)
-  isActive   Boolean        @default(true)
-  startsAt   DateTime?
-  expiresAt  DateTime?
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
+  id        String         @id @default(cuid())
+  imageUrl  String?
+  imageUrls String[]
+  position  BannerPosition @default(HERO)
+  sortOrder Int            @default(0)
+  isActive  Boolean        @default(true)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 
   @@index([isActive, position, sortOrder])
   @@map("banners")
+}
+
+model HeroContent {
+  id        String   @id @default(cuid())
+  titleEn   String   @default("")
+  titleKu   String   @default("")
+  titleAr   String   @default("")
+  updatedAt DateTime @updatedAt
+
+  @@map("hero_content")
 }

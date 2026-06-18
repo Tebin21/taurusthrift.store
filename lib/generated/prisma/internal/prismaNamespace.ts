@@ -391,7 +391,8 @@ export const ModelName = {
   Order: 'Order',
   OrderItem: 'OrderItem',
   Coupon: 'Coupon',
-  Banner: 'Banner'
+  Banner: 'Banner',
+  HeroContent: 'HeroContent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -407,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "category" | "product" | "productVariant" | "order" | "orderItem" | "coupon" | "banner"
+    modelProps: "user" | "category" | "product" | "productVariant" | "order" | "orderItem" | "coupon" | "banner" | "heroContent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1003,6 +1004,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    HeroContent: {
+      payload: Prisma.$HeroContentPayload<ExtArgs>
+      fields: Prisma.HeroContentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HeroContentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeroContentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HeroContentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeroContentPayload>
+        }
+        findFirst: {
+          args: Prisma.HeroContentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeroContentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HeroContentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeroContentPayload>
+        }
+        findMany: {
+          args: Prisma.HeroContentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeroContentPayload>[]
+        }
+        create: {
+          args: Prisma.HeroContentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeroContentPayload>
+        }
+        createMany: {
+          args: Prisma.HeroContentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HeroContentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeroContentPayload>[]
+        }
+        delete: {
+          args: Prisma.HeroContentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeroContentPayload>
+        }
+        update: {
+          args: Prisma.HeroContentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeroContentPayload>
+        }
+        deleteMany: {
+          args: Prisma.HeroContentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HeroContentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HeroContentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeroContentPayload>[]
+        }
+        upsert: {
+          args: Prisma.HeroContentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeroContentPayload>
+        }
+        aggregate: {
+          args: Prisma.HeroContentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHeroContent>
+        }
+        groupBy: {
+          args: Prisma.HeroContentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HeroContentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HeroContentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HeroContentCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1176,28 +1251,27 @@ export type CouponScalarFieldEnum = (typeof CouponScalarFieldEnum)[keyof typeof 
 
 export const BannerScalarFieldEnum = {
   id: 'id',
-  title: 'title',
-  titleKu: 'titleKu',
-  titleAr: 'titleAr',
-  subtitle: 'subtitle',
-  subtitleKu: 'subtitleKu',
-  subtitleAr: 'subtitleAr',
   imageUrl: 'imageUrl',
   imageUrls: 'imageUrls',
-  linkUrl: 'linkUrl',
-  linkText: 'linkText',
-  linkTextKu: 'linkTextKu',
-  linkTextAr: 'linkTextAr',
   position: 'position',
   sortOrder: 'sortOrder',
   isActive: 'isActive',
-  startsAt: 'startsAt',
-  expiresAt: 'expiresAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type BannerScalarFieldEnum = (typeof BannerScalarFieldEnum)[keyof typeof BannerScalarFieldEnum]
+
+
+export const HeroContentScalarFieldEnum = {
+  id: 'id',
+  titleEn: 'titleEn',
+  titleKu: 'titleKu',
+  titleAr: 'titleAr',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HeroContentScalarFieldEnum = (typeof HeroContentScalarFieldEnum)[keyof typeof HeroContentScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1452,6 +1526,7 @@ export type GlobalOmitConfig = {
   orderItem?: Prisma.OrderItemOmit
   coupon?: Prisma.CouponOmit
   banner?: Prisma.BannerOmit
+  heroContent?: Prisma.HeroContentOmit
 }
 
 /* Types for Logging */

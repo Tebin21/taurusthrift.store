@@ -81,3 +81,8 @@ export type Coupon = Prisma.CouponModel
  * 
  */
 export type Banner = Prisma.BannerModel
+/**
+ * Model HeroContent
+ * 
+ */
+export type HeroContent = Prisma.HeroContentModel

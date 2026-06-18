@@ -19,6 +19,8 @@ interface ImageUploadProps {
   className?: string;
   /** Pass an aspect ratio (e.g. 3/4, 1, 4/3) to enable the crop dialog before upload */
   aspect?: number;
+  /** Subfolder within the Supabase bucket (defaults to "products") */
+  folder?: string;
 }
 
 function validateFile(file: File): string | null {
@@ -73,7 +75,7 @@ function uploadBlobToSupabase(
   });
 }
 
-export function ImageUpload({ value, onChange, max, label, className, aspect }: ImageUploadProps) {
+export function ImageUpload({ value, onChange, max, label, className, aspect, folder: folderProp }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [isDragging, setIsDragging] = useState(false);
@@ -89,7 +91,7 @@ export function ImageUpload({ value, onChange, max, label, className, aspect }: 
     async (blobs: Blob[], names: string[]) => {
       setUploading(true);
 
-      const folder = "products";
+      const folder = folderProp ?? "products";
       const results = await Promise.allSettled(
         blobs.map((blob, i) =>
           uploadBlobToSupabase(blob, names[i] ?? `image-${i}.jpg`, folder, (pct) =>
@@ -117,7 +119,7 @@ export function ImageUpload({ value, onChange, max, label, className, aspect }: 
       setProgress({});
       setUploading(false);
     },
-    [value, onChange]
+    [value, onChange, folderProp]
   );
 
   // ─── Receive and validate files ──────────────────────────────────────────
@@ -246,7 +248,7 @@ export function ImageUpload({ value, onChange, max, label, className, aspect }: 
             <span className="text-xs font-normal text-muted-foreground ml-2">
               JPG, PNG, WebP · max {MAX_SIZE_MB}MB
               {max !== undefined && ` · max ${max} image${max === 1 ? "" : "s"}`}
-              {aspect !== undefined && ` · ${aspect === 3 / 4 ? "3:4" : aspect === 1 ? "1:1" : aspect === 4 / 3 ? "4:3" : ""} ratio`}
+              {aspect !== undefined && ` · ${aspect === 3 / 4 ? "3:4" : aspect === 1 ? "1:1" : aspect === 4 / 3 ? "4:3" : aspect === 16 / 7 ? "16:7" : ""} ratio`}
             </span>
           </p>
         )}

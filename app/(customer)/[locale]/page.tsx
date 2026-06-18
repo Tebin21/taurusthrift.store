@@ -20,12 +20,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function HomePage() {
-  const [banners, newArrivals, featured, categories] = await Promise.all([
+  const [banners, heroContent, newArrivals, featured, categories] = await Promise.all([
     prisma.banner.findMany({
       where: { isActive: true, position: "HERO" },
       orderBy: { sortOrder: "asc" },
       take: 5,
     }),
+    prisma.heroContent.findFirst(),
     prisma.product.findMany({
       where: { isActive: true, isNewArrival: true },
       include: { categories: { select: { name: true, slug: true } }, variants: { select: { stock: true } } },
@@ -47,7 +48,7 @@ export default async function HomePage() {
 
   return (
     <div>
-      <HeroBanner banners={banners} />
+      <HeroBanner banners={banners} heroContent={heroContent} />
       <NewArrivalsSection products={newArrivals.map(serializeProduct) as unknown as Product[]} />
       <FeaturedSection products={featured.map(serializeProduct) as unknown as Product[]} />
       <CategoriesSection categories={categories} />

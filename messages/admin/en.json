@@ -41,6 +41,7 @@
     "categories": "Categories",
     "orders": "Orders",
     "coupons": "Coupons",
+    "heroContent": "Hero Content",
     "banners": "Banners",
     "customers": "Customers",
     "reports": "Reports",
@@ -280,9 +281,20 @@
       "saveFailed": "Failed to save coupon"
     }
   },
+  "heroContent": {
+    "title": "Hero Content",
+    "subtitle": "Edit the homepage hero text shown above the banner slider",
+    "titleEn": "Hero Title (English)",
+    "titleKu": "Hero Title (Kurdish)",
+    "titleAr": "Hero Title (Arabic)",
+    "toast": {
+      "saved": "Hero content saved",
+      "saveFailed": "Failed to save hero content"
+    }
+  },
   "banners": {
     "title": "Banners",
-    "subtitle": "Manage homepage banners",
+    "subtitle": "Manage homepage banner images",
     "addBanner": "Add Banner",
     "editBanner": "Edit Banner",
     "entityName": "Banner",
@@ -293,18 +305,9 @@
     },
     "form": {
       "image": "Banner Image",
-      "imageLabel": "Banner image",
-      "details": "Banner Details",
-      "titleEn": "Title (English) *",
-      "titleKu": "Kurdish Title",
-      "titleAr": "Arabic Title",
-      "subtitle": "Subtitle",
-      "linkUrl": "Link URL",
-      "linkText": "Link Text",
-      "position": "Position",
+      "imageLabel": "Banner image (16:7 ratio)",
+      "details": "Banner Settings",
       "sortOrder": "Sort Order",
-      "startsAt": "Starts At",
-      "expiresAt": "Expires At",
       "saveBanner": "Save Banner"
     },
     "toast": {

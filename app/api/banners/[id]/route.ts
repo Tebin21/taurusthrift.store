@@ -23,29 +23,20 @@ export async function PUT(
     const banner = await prisma.banner.update({
       where: { id },
       data: {
-        title: String(body.title ?? ""),
-        titleKu: body.titleKu || null,
-        titleAr: body.titleAr || null,
-        subtitle: body.subtitle || null,
-        subtitleKu: body.subtitleKu || null,
-        subtitleAr: body.subtitleAr || null,
         ...(imageUrls && { imageUrl: imageUrls[0], imageUrls }),
-        linkUrl: body.linkUrl || null,
-        linkText: body.linkText || null,
-        linkTextKu: body.linkTextKu || null,
-        linkTextAr: body.linkTextAr || null,
         position: body.position,
         sortOrder: Number(body.sortOrder) || 0,
         isActive: Boolean(body.isActive ?? true),
-        startsAt: body.startsAt ? new Date(body.startsAt) : null,
-        expiresAt: body.expiresAt ? new Date(body.expiresAt) : null,
       },
     });
 
     return NextResponse.json({ success: true, data: banner });
   } catch (error) {
     console.error("[PUT /api/banners/[id]]", error);
-    return NextResponse.json({ success: false, error: "Failed to update banner" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: error instanceof Error ? error.message : "Failed to update banner" },
+      { status: 500 }
+    );
   }
 }
 
@@ -63,6 +54,9 @@ export async function DELETE(
     return NextResponse.json({ success: true, message: "Banner deleted" });
   } catch (error) {
     console.error("[DELETE /api/banners/[id]]", error);
-    return NextResponse.json({ success: false, error: "Failed to delete banner" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: error instanceof Error ? error.message : "Failed to delete banner" },
+      { status: 500 }
+    );
   }
 }

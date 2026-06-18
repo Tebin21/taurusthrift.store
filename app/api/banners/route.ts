@@ -46,29 +46,20 @@ export async function POST(req: NextRequest) {
 
     const banner = await prisma.banner.create({
       data: {
-        title: String(body.title ?? ""),
-        titleKu: body.titleKu || null,
-        titleAr: body.titleAr || null,
-        subtitle: body.subtitle || null,
-        subtitleKu: body.subtitleKu || null,
-        subtitleAr: body.subtitleAr || null,
         imageUrl: imageUrls[0],
         imageUrls,
-        linkUrl: body.linkUrl || null,
-        linkText: body.linkText || null,
-        linkTextKu: body.linkTextKu || null,
-        linkTextAr: body.linkTextAr || null,
         position: body.position ?? "HERO",
         sortOrder: Number(body.sortOrder) || 0,
         isActive: Boolean(body.isActive ?? true),
-        startsAt: body.startsAt ? new Date(body.startsAt) : null,
-        expiresAt: body.expiresAt ? new Date(body.expiresAt) : null,
       },
     });
 
     return NextResponse.json({ success: true, data: banner }, { status: 201 });
   } catch (error) {
     console.error("[POST /api/banners]", error);
-    return NextResponse.json({ success: false, error: "Failed to create banner" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: error instanceof Error ? error.message : "Failed to create banner" },
+      { status: 500 }
+    );
   }
 }
