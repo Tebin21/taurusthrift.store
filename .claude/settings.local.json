@@ -168,7 +168,9 @@
       "Bash(mkdir -p /tmp/pw-scratch)",
       "Bash(npm init *)",
       "Bash(cp /tmp/verify-taurus.mjs /tmp/pw-scratch/verify-taurus.mjs)",
-      "Bash(node verify-taurus.mjs)"
+      "Bash(node verify-taurus.mjs)",
+      "Bash(ps -p 82055 -o pid,etime,command)",
+      "Bash(xargs -I{} ps -p {} -o pid,etime,command)"
     ],
     "additionalDirectories": [
       "/private/tmp"
