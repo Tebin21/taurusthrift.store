@@ -305,7 +305,7 @@
     },
     "form": {
       "image": "Banner Image",
-      "imageLabel": "Banner image (16:7 ratio)",
+      "imageLabel": "Banner image (16:10 ratio)",
       "details": "Banner Settings",
       "sortOrder": "Sort Order",
       "saveBanner": "Save Banner"

@@ -3,20 +3,20 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
+import { Phone, Globe } from "lucide-react";
 
 
 export function CustomerFooter() {
-  const t = useTranslations("nav");
-  const tc = useTranslations("contact");
+  const td = useTranslations("developer");
   const locale = useLocale();
 
   return (
     <footer className="relative border-t border-foreground/8 mt-16 overflow-hidden pb-28 md:pb-0" style={{ background: "#111111" }}>
 
       <div className="container mx-auto px-4 py-14 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+        <div className="flex flex-col items-center text-center">
           {/* Brand */}
-          <div className="md:col-span-2">
+          <div className="flex flex-col items-center text-center max-w-sm">
             <Link href={`/${locale}`} className="flex items-center gap-2.5 mb-5">
               <Image src="/logo-white.png" alt="Taurus Thrift" width={36} height={36} className="h-9 w-auto" />
               <span className="font-semibold text-lg text-white">Taurus Thrift</span>
@@ -61,37 +61,41 @@ export function CustomerFooter() {
             </div>
           </div>
 
-          {/* Navigation */}
-          <div>
-            <h4 className="font-semibold text-xs mb-4 uppercase tracking-[0.18em] text-brand-accent">
-              Navigate
-            </h4>
-            <ul className="space-y-2.5">
-              {[
-                { href: `/${locale}`, label: t("home") },
-                { href: `/${locale}/products`, label: t("products") },
-                { href: `/${locale}/categories`, label: t("categories") },
-              ].map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/45 hover:text-brand-accent transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="font-semibold text-xs mb-4 uppercase tracking-[0.18em] text-brand-accent">
-              {tc("info")}
-            </h4>
-            <ul className="space-y-2.5 text-sm text-white/45">
-              <li>{tc("hoursValue")}</li>
-            </ul>
+          {/* Developer credit */}
+          <div className="mt-12 w-full max-w-2xl border-t border-white/10 pt-10">
+            <p className="text-xs font-medium uppercase tracking-[0.25em] text-white/40 mb-3">
+              {td("label")}
+            </p>
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-brand-accent mb-5">
+              BexDre
+            </h3>
+            <p className="text-sm sm:text-base text-white/55 leading-relaxed mb-2 max-w-xl mx-auto">
+              {td("description")}
+            </p>
+            <p className="text-sm sm:text-base text-white/45 leading-relaxed mb-7 max-w-xl mx-auto">
+              {td("servicesIntro")}
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-10">
+              <a
+                href="tel:+9647708229696"
+                aria-label={td("phoneLabel")}
+                className="flex items-center gap-2.5 text-base sm:text-lg font-semibold text-white/85 hover:text-brand-accent transition-colors"
+              >
+                <Phone className="w-5 h-5 text-brand-accent" />
+                {td("phone")}
+              </a>
+              <span className="hidden sm:block w-px h-6 bg-white/15" />
+              <a
+                href="https://www.bexdre.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={td("websiteLabel")}
+                className="flex items-center gap-2.5 text-base sm:text-lg font-semibold text-white/85 hover:text-brand-accent transition-colors"
+              >
+                <Globe className="w-5 h-5 text-brand-accent" />
+                {td("website")}
+              </a>
+            </div>
           </div>
         </div>
 

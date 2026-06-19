@@ -5,6 +5,7 @@
     "products": "Products",
     "categories": "Categories",
     "cart": "Cart",
+    "favorites": "Favorites",
     "newArrivals": "New Arrivals",
     "search": "Search products..."
   },
@@ -19,7 +20,7 @@
     "hero": {
       "title": "Old Clothes,",
       "titleAccent": "New Story",
-      "subtitle": "Every garment deserves a second chance.",
+      "subtitle": "Every clothes deserves a second chance.",
       "cta": "Shop Now",
       "ctaSecondary": "View New Arrivals"
     },
@@ -90,6 +91,16 @@
     "items": "{count, plural, =1 {1 item} other {# items}}",
     "remove": "Remove"
   },
+  "favorites": {
+    "title": "My Favorites",
+    "savedCount": "{count, plural, =1 {1 saved item} other {# saved items}}",
+    "emptyTitle": "Your favorites list is empty",
+    "emptySubtitle": "Save items you love by tapping the heart on any product",
+    "browseProducts": "Browse Products",
+    "viewProduct": "View Product",
+    "remove": "Remove from Favorites",
+    "clearAll": "Clear all"
+  },
   "checkout": {
     "title": "Checkout",
     "orderSummary": "Order Summary",
@@ -137,9 +148,14 @@
     "phone": "Phone",
     "address": "Address"
   },
-  "contact": {
-    "info": "Contact Information",
-    "hoursValue": "Mon - Sat: 10:00 AM - 8:00 PM"
+  "developer": {
+    "label": "Developed by",
+    "description": "This website was professionally designed and developed by BexDre.",
+    "servicesIntro": "For custom websites, business systems, mobile applications, e-commerce platforms, and software solutions, contact us:",
+    "phoneLabel": "Phone",
+    "phone": "0770 822 9696",
+    "websiteLabel": "Website",
+    "website": "www.BexDre.com"
   },
   "common": {
     "loading": "Loading...",

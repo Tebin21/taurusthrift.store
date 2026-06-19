@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil } from "lucide-react";
 import { DeleteButton } from "@/components/admin/shared/delete-button";
+import type { Banner } from "@/types/banner";
 
 export const metadata = { title: "Banners" };
 
 export default async function AdminBannersPage() {
   const t = await getTranslations("banners");
+  const tForm = await getTranslations("banners.form");
   const tCommon = await getTranslations("common");
   const banners = await prisma.banner.findMany({ orderBy: [{ position: "asc" }, { sortOrder: "asc" }] });
 
@@ -27,11 +29,11 @@ export default async function AdminBannersPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {banners.map((banner: any) => (
+        {banners.map((banner: Banner) => (
           <div key={banner.id} className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-md transition-shadow">
             {(banner.imageUrls?.[0] ?? banner.imageUrl) && (
               <div className="relative h-40 bg-muted">
-                <Image src={banner.imageUrls?.[0] ?? banner.imageUrl} alt={banner.title} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+                <Image src={banner.imageUrls?.[0] ?? banner.imageUrl ?? ""} alt={`Banner ${banner.sortOrder}`} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
                 {(banner.imageUrls?.length ?? 0) > 1 && (
                   <span className="absolute bottom-2 end-2 text-xs bg-black/60 text-white px-1.5 py-0.5 rounded">
                     {banner.imageUrls.length} photos
@@ -40,8 +42,8 @@ export default async function AdminBannersPage() {
               </div>
             )}
             <div className="p-4">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-semibold">{banner.title}</h3>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-muted-foreground">{tForm("sortOrder")}: {banner.sortOrder}</span>
                 <div className="flex gap-1">
                   <Badge variant="outline" className="text-xs">{t(`positions.${banner.position}`)}</Badge>
                   {banner.isActive ? (
@@ -51,7 +53,6 @@ export default async function AdminBannersPage() {
                   )}
                 </div>
               </div>
-              {banner.subtitle && <p className="text-sm text-muted-foreground">{banner.subtitle}</p>}
               <div className="mt-3 flex gap-2">
                 <Button variant="outline" size="sm" asChild className="flex-1">
                   <Link href={`/admin/banners/${banner.id}`}><Pencil className="h-3 w-3 me-1" />{tCommon("edit")}</Link>

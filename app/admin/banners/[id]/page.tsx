@@ -92,7 +92,7 @@ export default function BannerFormPage() {
               value={imageUrls}
               onChange={setImageUrls}
               max={5}
-              aspect={16 / 7}
+              aspect={16 / 10}
               folder="banners"
               label={tForm("imageLabel")}
             />

@@ -3,19 +3,22 @@
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
-import { Home, ShoppingBag, LayoutGrid } from "lucide-react";
-import { motion } from "framer-motion";
+import { Home, ShoppingBag, LayoutGrid, Heart } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useFavoritesCount } from "@/store/favorites.store";
 
 export function MobileBottomNav() {
   const t = useTranslations("nav");
   const locale = useLocale();
   const pathname = usePathname();
+  const favoritesCount = useFavoritesCount();
 
   const navLinks = [
     { href: `/${locale}`, label: t("home"), icon: Home },
     { href: `/${locale}/products`, label: t("products"), icon: ShoppingBag },
     { href: `/${locale}/categories`, label: t("categories"), icon: LayoutGrid },
+    { href: `/${locale}/favorites`, label: t("favorites"), icon: Heart, badge: favoritesCount },
   ];
 
   return (
@@ -63,7 +66,23 @@ export function MobileBottomNav() {
                   isActive && "text-white dark:text-black"
                 )}
               >
-                <Icon className="h-5 w-5 shrink-0" />
+                <span className="relative inline-flex shrink-0">
+                  <Icon className="h-5 w-5 shrink-0" />
+                  <AnimatePresence>
+                    {!!link.badge && (
+                      <motion.span
+                        key="favorites-count"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                        className="absolute -top-1.5 -end-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-white px-1 text-[9px] font-semibold text-brand-brown shadow-sm dark:bg-brand-white dark:text-brand-brown"
+                      >
+                        {link.badge > 99 ? "99+" : link.badge}
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </span>
                 {isActive && (
                   <span className="text-sm font-semibold whitespace-nowrap">
                     {link.label}

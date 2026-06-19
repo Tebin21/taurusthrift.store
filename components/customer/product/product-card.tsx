@@ -4,10 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { memo, useEffect, useState } from "react";
 import { useLocale } from "next-intl";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Heart } from "lucide-react";
 import { formatPrice } from "@/lib/utils/currency";
-import { useWishlistStore } from "@/store/wishlist.store";
+import { useFavoritesStore } from "@/store/favorites.store";
 import type { Product } from "@/types/product";
 import { Badge } from "@/components/ui/badge";
 
@@ -17,10 +17,10 @@ type Props = {
 
 export const ProductCard = memo(function ProductCard({ product }: Props) {
   const locale = useLocale();
-  const { toggle, has } = useWishlistStore();
+  const { toggle, has } = useFavoritesStore();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const isWishlisted = mounted && has(product.id);
+  const isFavorited = mounted && has(product.id);
 
   const localizedName =
     (locale === "ku" ? product.nameKu : locale === "ar" ? product.nameAr : null) ?? product.name;
@@ -66,18 +66,28 @@ export const ProductCard = memo(function ProductCard({ product }: Props) {
             )}
           </div>
 
-          {/* Wishlist */}
+          {/* Favorite */}
           <button
             type="button"
-            aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+            aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
             onClick={(e) => { e.preventDefault(); toggle(product.id); }}
             className="absolute top-3 end-3 w-8 h-8 rounded-full bg-white/85 dark:bg-black/60 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 [@media(hover:none)]:opacity-100 transition-all duration-200 shadow-sm hover:scale-110"
           >
-            <Heart
-              className="w-4 h-4 transition-colors"
-              fill={isWishlisted ? "#65000B" : "none"}
-              stroke={isWishlisted ? "#65000B" : "currentColor"}
-            />
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={isFavorited ? "filled" : "outline"}
+                initial={{ scale: 0.6 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                className="flex"
+              >
+                <Heart
+                  className="w-4 h-4 transition-colors"
+                  fill={isFavorited ? "#65000B" : "none"}
+                  stroke={isFavorited ? "#65000B" : "currentColor"}
+                />
+              </motion.span>
+            </AnimatePresence>
           </button>
         </div>
 

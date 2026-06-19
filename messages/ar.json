@@ -5,6 +5,7 @@
     "products": "المنتجات",
     "categories": "الفئات",
     "cart": "السلة",
+    "favorites": "المفضلة",
     "newArrivals": "وصل حديثاً",
     "search": "ابحث عن منتجات..."
   },
@@ -90,6 +91,16 @@
     "items": "{count, plural, =1 {منتج واحد} =2 {منتجان} other {# منتجات}}",
     "remove": "إزالة"
   },
+  "favorites": {
+    "title": "المفضلة",
+    "savedCount": "{count, plural, =1 {عنصر واحد محفوظ} =2 {عنصران محفوظان} other {# عناصر محفوظة}}",
+    "emptyTitle": "قائمة المفضلة فارغة",
+    "emptySubtitle": "احفظ المنتجات التي تحبها بالنقر على أيقونة القلب في أي منتج",
+    "browseProducts": "تصفح المنتجات",
+    "viewProduct": "عرض المنتج",
+    "remove": "إزالة من المفضلة",
+    "clearAll": "إزالة الكل"
+  },
   "checkout": {
     "title": "الدفع",
     "orderSummary": "ملخص الطلب",
@@ -137,9 +148,14 @@
     "phone": "الهاتف",
     "address": "العنوان"
   },
-  "contact": {
-    "info": "معلومات الاتصال",
-    "hoursValue": "الإثنين - السبت: 10:00 ص - 8:00 م"
+  "developer": {
+    "label": "تطوير من قبل",
+    "description": "تم تصميم وتطوير هذا الموقع بشكل احترافي من قبل BexDre.",
+    "servicesIntro": "لإنشاء مواقع مخصصة، أنظمة أعمال، تطبيقات موبايل، منصات تجارة إلكترونية، وحلول برمجية، تواصل معنا:",
+    "phoneLabel": "الهاتف",
+    "phone": "0770 822 9696",
+    "websiteLabel": "الموقع الإلكتروني",
+    "website": "www.BexDre.com"
   },
   "common": {
     "loading": "جارٍ التحميل...",

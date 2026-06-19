@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Banner } from "@/types/banner";
 import type { HeroContent } from "@/types/hero-content";
 
@@ -22,71 +21,26 @@ export function HeroBanner({ banners, heroContent }: Props) {
   const isRtl = locale === "ar" || locale === "ku";
 
   const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const touchStartX = useRef<number | null>(null);
 
   const total = banners.length;
 
-  const goTo = useCallback(
-    (index: number, dir?: number) => {
-      const next = (index + total) % total;
-      setDirection(dir ?? (next > current ? 1 : -1));
-      setCurrent(next);
-    },
-    [total, current]
-  );
-
-  const next = useCallback(() => goTo(current + 1, 1), [current, goTo]);
-  const prev = useCallback(() => goTo(current - 1, -1), [current, goTo]);
+  // Autoplay-only advance — no manual navigation triggers this
+  const next = useCallback(() => {
+    setCurrent((c) => (c + 1) % total);
+  }, [total]);
 
   useEffect(() => {
     if (total <= 1 || isPaused) return;
-    timerRef.current = setInterval(next, INTERVAL_MS);
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
+    const timer = setInterval(next, INTERVAL_MS);
+    return () => clearInterval(timer);
   }, [total, isPaused, next]);
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") isRtl ? prev() : next();
-      if (e.key === "ArrowLeft") isRtl ? next() : prev();
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [isRtl, next, prev]);
-
-  // Touch/swipe handlers
-  const onTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
-    const delta = e.changedTouches[0].clientX - touchStartX.current;
-    touchStartX.current = null;
-    if (Math.abs(delta) < 50) return;
-    if (delta < 0) {
-      isRtl ? prev() : next();
-    } else {
-      isRtl ? next() : prev();
-    }
-  };
-
-  // Slide animation variants — direction and RTL aware
+  // Slide animation — RTL/LTR aware, forward-only (autoplay)
   const slideVariants = {
-    enter: (d: number) => ({
-      x: d * (isRtl ? -1 : 1) > 0 ? "100%" : "-100%",
-      opacity: 0,
-    }),
+    enter: { x: isRtl ? "-100%" : "100%", opacity: 0 },
     center: { x: 0, opacity: 1, transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] } },
-    exit: (d: number) => ({
-      x: d * (isRtl ? -1 : 1) > 0 ? "-100%" : "100%",
-      opacity: 0,
-      transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
-    }),
+    exit: { x: isRtl ? "100%" : "-100%", opacity: 0, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] } },
   };
 
   // Hero title: use HeroContent db value if set, else fall back to translation
@@ -166,18 +120,13 @@ export function HeroBanner({ banners, heroContent }: Props) {
       {/* ── Image Slider ───────────────────────────────────────────── */}
       {banners.length > 0 && (
         <div className="container mx-auto px-4 pb-16">
-          <div
-            className="relative overflow-hidden rounded-2xl"
-            onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}
-          >
-            {/* 16:7 aspect ratio wrapper */}
-            <div className="relative w-full" style={{ paddingBottom: "43.75%" /* 7/16 */ }}>
-              <AnimatePresence mode="popLayout" custom={direction}>
+          <div className="relative overflow-hidden rounded-2xl">
+            {/* 16:10 aspect ratio wrapper — wide but not panoramic */}
+            <div className="relative w-full aspect-[16/10]">
+              <AnimatePresence mode="popLayout">
                 {imageUrl && (
                   <motion.div
                     key={`slide-${current}`}
-                    custom={direction}
                     variants={slideVariants}
                     initial="enter"
                     animate="center"
@@ -208,40 +157,16 @@ export function HeroBanner({ banners, heroContent }: Props) {
               )}
             </div>
 
-            {/* Prev / Next arrows — only when multiple banners */}
+            {/* Pagination dots — visual indicators only, not interactive */}
             {total > 1 && (
-              <>
-                <button
-                  onClick={prev}
-                  aria-label="Previous banner"
-                  className="absolute start-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/80 hover:bg-white dark:bg-black/50 dark:hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-foreground dark:text-white shadow-lg transition-all hover:scale-105"
-                >
-                  <ChevronLeft className="w-5 h-5 rtl:hidden" />
-                  <ChevronRight className="w-5 h-5 ltr:hidden" />
-                </button>
-                <button
-                  onClick={next}
-                  aria-label="Next banner"
-                  className="absolute end-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/80 hover:bg-white dark:bg-black/50 dark:hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-foreground dark:text-white shadow-lg transition-all hover:scale-105"
-                >
-                  <ChevronRight className="w-5 h-5 rtl:hidden" />
-                  <ChevronLeft className="w-5 h-5 ltr:hidden" />
-                </button>
-              </>
-            )}
-
-            {/* Pagination dots */}
-            {total > 1 && (
-              <div className="absolute bottom-4 inset-x-0 flex justify-center gap-2 z-20">
+              <div className="absolute bottom-4 inset-x-0 flex justify-center gap-2 z-20" aria-hidden="true">
                 {banners.map((_, i) => (
-                  <button
+                  <span
                     key={i}
-                    onClick={() => goTo(i, i > current ? 1 : -1)}
-                    aria-label={`Banner ${i + 1} of ${total}`}
                     className={`rounded-full transition-all duration-300 ${
                       i === current
                         ? "w-6 h-2 bg-white shadow-sm"
-                        : "w-2 h-2 bg-white/50 hover:bg-white/80"
+                        : "w-2 h-2 bg-white/50"
                     }`}
                   />
                 ))}

@@ -6,6 +6,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { LanguageSwitcher } from "./language-switcher";
 import { CartButton } from "./cart-button";
+import { FavoritesButton } from "./favorites-button";
 import { CartDrawer } from "../cart/cart-drawer";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
@@ -99,6 +100,7 @@ export function CustomerHeader() {
               <LanguageSwitcher />
               <ThemeToggle className="rounded-full text-foreground/55 hover:text-foreground hover:bg-brand-brown/10 dark:text-brand-white/55 dark:hover:text-brand-white dark:hover:bg-brand-brown/20" />
               <div className="mx-1 h-5 w-px bg-foreground/10 dark:bg-brand-white/10" />
+              <FavoritesButton />
               <CartButton />
             </div>
           </div>

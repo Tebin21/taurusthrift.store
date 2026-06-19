@@ -248,7 +248,7 @@ export function ImageUpload({ value, onChange, max, label, className, aspect, fo
             <span className="text-xs font-normal text-muted-foreground ml-2">
               JPG, PNG, WebP · max {MAX_SIZE_MB}MB
               {max !== undefined && ` · max ${max} image${max === 1 ? "" : "s"}`}
-              {aspect !== undefined && ` · ${aspect === 3 / 4 ? "3:4" : aspect === 1 ? "1:1" : aspect === 4 / 3 ? "4:3" : aspect === 16 / 7 ? "16:7" : ""} ratio`}
+              {aspect !== undefined && ` · ${aspect === 3 / 4 ? "3:4" : aspect === 1 ? "1:1" : aspect === 4 / 3 ? "4:3" : aspect === 16 / 10 ? "16:10" : ""} ratio`}
             </span>
           </p>
         )}
