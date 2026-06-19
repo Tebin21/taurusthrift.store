@@ -183,7 +183,9 @@
       "Bash(kill %1)",
       "Bash(lsof -nP -iTCP:3001 -sTCP:LISTEN)",
       "Bash(awk 'NR>1{print $2}')",
-      "Bash(xargs -r kill)"
+      "Bash(xargs -r kill)",
+      "Bash(curl -s -o /dev/null -w \"status=%{http_code}\\\\n\" http://localhost:3000/en)",
+      "Bash(kill 86098)"
     ],
     "additionalDirectories": [
       "/private/tmp"
