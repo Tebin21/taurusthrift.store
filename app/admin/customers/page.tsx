@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
 import { formatIQD } from "@/lib/utils/currency";
+import { LtrText } from "@/components/shared/ltr-text";
 
 export const metadata = { title: "Customers" };
 
@@ -44,7 +45,7 @@ export default async function AdminCustomersPage() {
               customers.map((c: any) => (
                 <tr key={c.customerPhone} className="hover:bg-muted/30">
                   <td className="px-4 py-3 font-medium">{c.customerName}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{c.customerPhone}</td>
+                  <td className="px-4 py-3 text-muted-foreground"><LtrText>{c.customerPhone}</LtrText></td>
                   <td className="px-4 py-3">{c._count.id}</td>
                   <td className="px-4 py-3 font-medium">{formatIQD(Number(c._sum.total ?? 0))}</td>
                 </tr>

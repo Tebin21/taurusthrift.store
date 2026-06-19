@@ -11,6 +11,7 @@ import { OrderStatusSelect } from "./order-status-select";
 import { MarkDoneButton } from "./mark-done-button";
 import { Search, Download, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { formatPrice } from "@/lib/utils/currency";
+import { LtrText } from "@/components/shared/ltr-text";
 
 const STATUS_OPTIONS = ["ALL", "PENDING", "CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED", "REFUNDED"];
 
@@ -177,7 +178,7 @@ export function OrdersTableClient({ orders, total, page, limit, initialSearch, i
                     <td className="px-4 py-3">
                       <div>
                         <p className="font-medium">{order.customerName}</p>
-                        <p className="text-xs text-muted-foreground">{order.customerPhone}</p>
+                        <p className="text-xs text-muted-foreground"><LtrText>{order.customerPhone}</LtrText></p>
                       </div>
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">{order.itemCount}</td>

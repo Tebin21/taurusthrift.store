@@ -7,6 +7,7 @@ import { CheckCircle, Package, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { LtrText } from "@/components/shared/ltr-text";
 
 // Always reflect the order's live status/PII rather than caching a snapshot from first view.
 export const dynamic = "force-dynamic";
@@ -53,7 +54,7 @@ export default async function OrderConfirmationPage({
             </div>
             <div className="flex items-start gap-2">
               <Phone className="h-4 w-4 mt-0.5 text-brand-brown shrink-0" />
-              <span dir="ltr">{order.customerPhone}</span>
+              <LtrText>{order.customerPhone}</LtrText>
             </div>
             <div className="flex items-start gap-2 sm:col-span-2">
               <MapPin className="h-4 w-4 mt-0.5 text-brand-brown shrink-0" />

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Phone, Globe } from "lucide-react";
+import { LtrText } from "@/components/shared/ltr-text";
 
 
 export function CustomerFooter() {
@@ -82,7 +83,7 @@ export function CustomerFooter() {
                 className="flex items-center gap-2.5 text-base sm:text-lg font-semibold text-white/85 hover:text-brand-accent transition-colors"
               >
                 <Phone className="w-5 h-5 text-brand-accent" />
-                {td("phone")}
+                <LtrText>{td("phone")}</LtrText>
               </a>
               <span className="hidden sm:block w-px h-6 bg-white/15" />
               <a

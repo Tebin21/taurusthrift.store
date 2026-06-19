@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { OrderStatusSelect } from "@/components/admin/orders/order-status-select";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { LtrText } from "@/components/shared/ltr-text";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -48,7 +49,7 @@ export default async function OrderDetailPage({
           <CardHeader><CardTitle className="text-base">{t("customerInfo")}</CardTitle></CardHeader>
           <CardContent className="space-y-2 text-sm">
             <div><span className="text-muted-foreground">{t("name")}</span> <span className="font-medium ms-2">{order.customerName}</span></div>
-            <div><span className="text-muted-foreground">{t("phone")}</span> <span className="font-medium ms-2">{order.customerPhone}</span></div>
+            <div><span className="text-muted-foreground">{t("phone")}</span> <span className="font-medium ms-2"><LtrText>{order.customerPhone}</LtrText></span></div>
             <div><span className="text-muted-foreground">{t("address")}</span> <span className="font-medium ms-2">{order.customerAddress}</span></div>
             {order.customerCity && <div><span className="text-muted-foreground">{t("city")}</span> <span className="font-medium ms-2">{order.customerCity}</span></div>}
             {order.customerNotes && (
