@@ -1,3 +1,4 @@
+import { setRequestLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { serializeProduct } from "@/lib/utils";
 import { getActiveCategoriesWithCounts } from "@/lib/data/categories";
@@ -11,6 +12,7 @@ export const revalidate = 60;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  setRequestLocale(locale);
   return {
     title: "Taurus Thrift — Luxury Thrift Fashion",
     description: "Curated thrift fashion for the discerning eye.",

@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import Link from "next/link";
 import Image from "next/image";
 import { Tag } from "lucide-react";
@@ -6,6 +6,7 @@ import { getActiveCategoriesWithCounts } from "@/lib/data/categories";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "category" });
   return { title: t("browseTitle") };
 }
@@ -16,6 +17,7 @@ export default async function CategoriesPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "category" });
 
   const categories = await getActiveCategoriesWithCounts();

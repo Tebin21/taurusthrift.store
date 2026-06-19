@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { serializeProduct } from "@/lib/utils";
 import { getProductBySlug } from "@/lib/data/products";
@@ -23,6 +24,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
+  setRequestLocale(locale);
   const product = await getProductBySlug(slug);
   if (!product) return { title: "Not Found" };
 
@@ -57,6 +59,7 @@ export default async function ProductDetailPage({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
+  setRequestLocale(locale);
 
   const product = await getProductBySlug(slug);
 

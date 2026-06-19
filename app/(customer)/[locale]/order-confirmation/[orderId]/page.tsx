@@ -1,12 +1,15 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { formatPrice } from "@/lib/utils/currency";
 import { CheckCircle, Package, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+
+// Always reflect the order's live status/PII rather than caching a snapshot from first view.
+export const dynamic = "force-dynamic";
 
 export default async function OrderConfirmationPage({
   params,
@@ -14,6 +17,7 @@ export default async function OrderConfirmationPage({
   params: Promise<{ locale: string; orderId: string }>;
 }) {
   const { locale, orderId } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "confirmation" });
 
   const order = await prisma.order.findUnique({

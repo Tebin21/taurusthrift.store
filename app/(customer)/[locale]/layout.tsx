@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { routing, rtlLocales, type Locale } from "@/lib/routing";
 import { CustomerHeader } from "@/components/customer/layout/header";
 import { CustomerFooter } from "@/components/customer/layout/footer";
@@ -24,6 +24,8 @@ export default async function CustomerLayout({
   if (!routing.locales.includes(locale as Locale)) {
     notFound();
   }
+
+  setRequestLocale(locale);
 
   const messages = await getMessages();
   const dir = rtlLocales.includes(locale as Locale) ? "rtl" : "ltr";

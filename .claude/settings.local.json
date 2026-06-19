@@ -170,7 +170,20 @@
       "Bash(cp /tmp/verify-taurus.mjs /tmp/pw-scratch/verify-taurus.mjs)",
       "Bash(node verify-taurus.mjs)",
       "Bash(ps -p 82055 -o pid,etime,command)",
-      "Bash(xargs -I{} ps -p {} -o pid,etime,command)"
+      "Bash(xargs -I{} ps -p {} -o pid,etime,command)",
+      "Bash(lsof -nP -iTCP:3000 -sTCP:LISTEN)",
+      "Bash(curl -s http://localhost:3001/en/categories -o /tmp/categories.html)",
+      "Bash(curl -sI http://localhost:3001/en/cart)",
+      "Bash(curl -sI http://localhost:3001/en/checkout)",
+      "Bash(curl -sI http://localhost:3001/en/favorites)",
+      "Bash(curl -sI http://localhost:3001/en/categories)",
+      "Bash(curl -sI http://localhost:3001/en/products/camel-wool-blazer)",
+      "Bash(curl -sI http://localhost:3001/en/products)",
+      "Bash(curl -sI http://localhost:3001/en/category/accessories)",
+      "Bash(kill %1)",
+      "Bash(lsof -nP -iTCP:3001 -sTCP:LISTEN)",
+      "Bash(awk 'NR>1{print $2}')",
+      "Bash(xargs -r kill)"
     ],
     "additionalDirectories": [
       "/private/tmp"

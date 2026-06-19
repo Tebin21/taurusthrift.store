@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { serializeProduct } from "@/lib/utils";
 import { getActiveBrandsForCategory } from "@/lib/data/brands";
@@ -23,6 +24,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
+  setRequestLocale(locale);
   const category = await getCategoryBySlug(slug);
   if (!category) return { title: "Category Not Found" };
   const name =
@@ -42,6 +44,7 @@ export default async function CategoryPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const [{ locale, slug }, sp] = await Promise.all([params, searchParams]);
+  setRequestLocale(locale);
 
   const category = await getCategoryBySlug(slug);
 

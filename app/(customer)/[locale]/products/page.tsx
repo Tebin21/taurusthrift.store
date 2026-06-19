@@ -1,10 +1,13 @@
+import { setRequestLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { serializeProduct } from "@/lib/utils";
 import { getActiveBrands } from "@/lib/data/brands";
 import type { Product } from "@/types/product";
 import { ProductsClient } from "@/components/customer/product/products-client";
 
-export async function generateMetadata() {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   return { title: "Products" };
 }
 
