@@ -164,7 +164,11 @@
       "Bash(git checkout *)",
       "Bash(git stash *)",
       "Bash(cp /tmp/get-ids.ts ./get-ids-tmp.ts)",
-      "Bash(rm -f ./get-ids-tmp.ts)"
+      "Bash(rm -f ./get-ids-tmp.ts)",
+      "Bash(mkdir -p /tmp/pw-scratch)",
+      "Bash(npm init *)",
+      "Bash(cp /tmp/verify-taurus.mjs /tmp/pw-scratch/verify-taurus.mjs)",
+      "Bash(node verify-taurus.mjs)"
     ],
     "additionalDirectories": [
       "/private/tmp"
