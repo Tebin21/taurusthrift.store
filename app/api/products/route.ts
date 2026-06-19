@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
         where: { id: { in: idList }, isActive: true },
         include: {
           categories: { select: { id: true, name: true, nameKu: true, nameAr: true, slug: true, imageUrl: true } },
-          variants: true,
+          variants: { select: { stock: true } },
         },
       });
       return NextResponse.json({ success: true, data: products });
@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
         where,
         include: {
           categories: { select: { id: true, name: true, nameKu: true, nameAr: true, slug: true, imageUrl: true } },
-          variants: true,
+          variants: { select: { stock: true } },
         },
         orderBy,
         skip: (page - 1) * limit,

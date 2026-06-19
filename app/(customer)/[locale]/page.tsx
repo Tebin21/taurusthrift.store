@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { serializeProduct } from "@/lib/utils";
+import { getActiveCategoriesWithCounts } from "@/lib/data/categories";
 import type { Product } from "@/types/product";
 import { HeroBanner } from "@/components/customer/home/hero-banner";
 import { NewArrivalsSection } from "@/components/customer/home/new-arrivals-section";
@@ -39,11 +40,7 @@ export default async function HomePage() {
       orderBy: { createdAt: "desc" },
       take: 4,
     }),
-    prisma.category.findMany({
-      where: { isActive: true },
-      include: { _count: { select: { products: true } } },
-      orderBy: { sortOrder: "asc" },
-    }),
+    getActiveCategoriesWithCounts(),
   ]);
 
   return (

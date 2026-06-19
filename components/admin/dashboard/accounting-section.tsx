@@ -2,6 +2,7 @@ import { DollarSign, CheckCircle2, Clock, XCircle, CalendarDays, CalendarClock, 
 import { getTranslations } from "next-intl/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatPrice } from "@/lib/utils/currency";
+import { getDeliveredRevenueTotal, getMonthlyDeliveredRevenue, getPendingOrdersCount } from "@/lib/data/dashboard";
 
 export async function AccountingSection() {
   const t = await getTranslations("dashboard.accounting");
@@ -11,19 +12,19 @@ export async function AccountingSection() {
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
   const [
-    totalRevenueResult,
+    totalRevenue,
     revenueTodayResult,
-    revenueMonthResult,
+    monthlyRevenue,
     completedOrders,
     pendingOrders,
     cancelledOrders,
     bestSellers,
   ] = await Promise.all([
-    prisma.order.aggregate({ _sum: { total: true }, where: { status: "DELIVERED" } }),
+    getDeliveredRevenueTotal(),
     prisma.order.aggregate({ _sum: { total: true }, where: { status: "DELIVERED", completedAt: { gte: startOfDay } } }),
-    prisma.order.aggregate({ _sum: { total: true }, where: { status: "DELIVERED", completedAt: { gte: startOfMonth } } }),
+    getMonthlyDeliveredRevenue(),
     prisma.order.count({ where: { status: "DELIVERED" } }),
-    prisma.order.count({ where: { status: "PENDING" } }),
+    getPendingOrdersCount(),
     prisma.order.count({ where: { status: "CANCELLED" } }),
     prisma.orderItem.groupBy({
       by: ["productName"],
@@ -37,7 +38,7 @@ export async function AccountingSection() {
   const cards = [
     {
       title: t("totalRevenue"),
-      value: formatPrice(Number(totalRevenueResult._sum.total ?? 0)),
+      value: formatPrice(totalRevenue),
       icon: DollarSign,
       color: "text-brand-brown",
       iconBg: "bg-brand-brown/10",
@@ -51,7 +52,7 @@ export async function AccountingSection() {
     },
     {
       title: t("revenueThisMonth"),
-      value: formatPrice(Number(revenueMonthResult._sum.total ?? 0)),
+      value: formatPrice(monthlyRevenue),
       icon: CalendarDays,
       color: "text-blue-600",
       iconBg: "bg-blue-50 dark:bg-blue-950/30",

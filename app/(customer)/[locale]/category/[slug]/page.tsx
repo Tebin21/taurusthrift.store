@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { serializeProduct } from "@/lib/utils";
 import { getActiveBrandsForCategory } from "@/lib/data/brands";
+import { getCategoryBySlug } from "@/lib/data/categories";
 import type { Product } from "@/types/product";
 import { CategoryPageClient } from "@/components/customer/category/category-page-client";
 
@@ -22,7 +23,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
-  const category = await prisma.category.findUnique({ where: { slug } });
+  const category = await getCategoryBySlug(slug);
   if (!category) return { title: "Category Not Found" };
   const name =
     (locale === "ku" ? category.nameKu : locale === "ar" ? category.nameAr : null) ?? category.name;
@@ -42,10 +43,7 @@ export default async function CategoryPage({
 }) {
   const [{ locale, slug }, sp] = await Promise.all([params, searchParams]);
 
-  const category = await prisma.category.findUnique({
-    where: { slug, isActive: true },
-    include: { _count: { select: { products: true } } },
-  });
+  const category = await getCategoryBySlug(slug);
 
   if (!category) notFound();
 

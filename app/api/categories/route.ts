@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { generateSlug } from "@/lib/utils/slug";
@@ -41,6 +42,8 @@ export async function POST(req: NextRequest) {
         sortOrder: sortOrder ?? 0,
       },
     });
+
+    revalidateTag("categories", { expire: 0 });
 
     return NextResponse.json({ success: true, data: category }, { status: 201 });
   } catch (error) {

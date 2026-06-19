@@ -2,10 +2,12 @@
 
 import { useRef, useState, useCallback, DragEvent } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { Upload, X, Loader2, GripVertical, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { ImageCropper } from "./image-cropper";
+
+const ImageCropper = dynamic(() => import("./image-cropper").then((m) => m.ImageCropper), { ssr: false });
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE_MB = 10;

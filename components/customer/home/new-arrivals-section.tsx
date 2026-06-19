@@ -9,6 +9,13 @@ import { ArrowRight } from "lucide-react";
 
 type Props = { products: Product[] };
 
+const headerInitial = { opacity: 0, x: -20 };
+const headerWhileInView = { opacity: 1, x: 0 };
+const headerTransition = { duration: 0.5 };
+const viewportOnce = { once: true };
+const cardInitial = { opacity: 0, y: 20 };
+const cardWhileInView = { opacity: 1, y: 0 };
+
 export function NewArrivalsSection({ products }: Props) {
   const t = useTranslations("home");
   const locale = useLocale();
@@ -19,10 +26,10 @@ export function NewArrivalsSection({ products }: Props) {
     <section className="py-20 px-4 container mx-auto">
       <div className="flex items-end justify-between mb-10">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          initial={headerInitial}
+          whileInView={headerWhileInView}
+          viewport={viewportOnce}
+          transition={headerTransition}
         >
           <p className="text-xs font-semibold tracking-[0.25em] uppercase text-brand-brown dark:text-brand-accent mb-2 pb-1 border-b border-brand-brown/30 dark:border-brand-accent/40 inline-block">
             Just In
@@ -47,9 +54,9 @@ export function NewArrivalsSection({ products }: Props) {
         {products.map((product, i) => (
           <motion.div
             key={product.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={cardInitial}
+            whileInView={cardWhileInView}
+            viewport={viewportOnce}
             transition={{ duration: 0.4, delay: i * 0.05 }}
           >
             <ProductCard product={product} />

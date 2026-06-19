@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { SalesChartsClient } from "./sales-charts-client";
+import { SalesChartsLazy } from "./sales-charts-lazy";
 
 export async function SalesCharts() {
   const now = new Date();
@@ -43,5 +43,5 @@ export async function SalesCharts() {
     count: s._count.status,
   }));
 
-  return <SalesChartsClient revenueData={revenueData} statusData={statusData} />;
+  return <SalesChartsLazy revenueData={revenueData} statusData={statusData} />;
 }

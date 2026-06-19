@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils/currency";
+import { getDeliveredRevenueTotal, getMonthlyDeliveredRevenue, getPendingOrdersCount } from "@/lib/data/dashboard";
 
 export async function DashboardStats() {
   const t = await getTranslations("dashboard");
@@ -18,21 +19,18 @@ export async function DashboardStats() {
     monthlyOrders,
     lastMonthOrders,
     totalProducts,
-    revenueResult,
-    monthlyRevenueResult,
+    totalRevenue,
+    monthlyRevenue,
     lastMonthRevenueResult,
     lowStockVariants,
   ] = await Promise.all([
     prisma.order.count(),
-    prisma.order.count({ where: { status: "PENDING" } }),
+    getPendingOrdersCount(),
     prisma.order.count({ where: { createdAt: { gte: startOfMonth } } }),
     prisma.order.count({ where: { createdAt: { gte: startOfLastMonth, lte: endOfLastMonth } } }),
     prisma.product.count({ where: { isActive: true } }),
-    prisma.order.aggregate({ _sum: { total: true }, where: { status: "DELIVERED" } }),
-    prisma.order.aggregate({
-      _sum: { total: true },
-      where: { status: "DELIVERED", completedAt: { gte: startOfMonth } },
-    }),
+    getDeliveredRevenueTotal(),
+    getMonthlyDeliveredRevenue(),
     prisma.order.aggregate({
       _sum: { total: true },
       where: {
@@ -43,8 +41,6 @@ export async function DashboardStats() {
     prisma.productVariant.count({ where: { stock: { gt: 0, lte: 3 } } }),
   ]);
 
-  const totalRevenue = Number(revenueResult._sum.total ?? 0);
-  const monthlyRevenue = Number(monthlyRevenueResult._sum.total ?? 0);
   const lastMonthRevenue = Number(lastMonthRevenueResult._sum.total ?? 0);
   const revenueGrowth = lastMonthRevenue > 0
     ? ((monthlyRevenue - lastMonthRevenue) / lastMonthRevenue) * 100

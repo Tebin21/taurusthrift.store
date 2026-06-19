@@ -1,15 +1,32 @@
 import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
+import { buildOrdersWhere } from "@/lib/data/orders";
 import { OrdersTableClient } from "@/components/admin/orders/orders-table-client";
 
 export const metadata = { title: "Orders" };
 
-export default async function AdminOrdersPage() {
+const PAGE_SIZE = 20;
+
+export default async function AdminOrdersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; search?: string; status?: string }>;
+}) {
   const t = await getTranslations("orders");
-  const rawOrders = await prisma.order.findMany({
-    include: { items: { select: { quantity: true } } },
-    orderBy: { createdAt: "desc" },
-  });
+  const { page: pageParam, search, status } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
+  const where = buildOrdersWhere(search, status);
+
+  const [total, rawOrders] = await Promise.all([
+    prisma.order.count({ where }),
+    prisma.order.findMany({
+      where,
+      include: { items: { select: { quantity: true } } },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    }),
+  ]);
 
   const orders = rawOrders.map((order: any) => ({
     id: order.id,
@@ -26,9 +43,16 @@ export default async function AdminOrdersPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("totalCount", { count: orders.length })}</p>
+        <p className="text-muted-foreground">{t("totalCount", { count: total })}</p>
       </div>
-      <OrdersTableClient orders={orders} />
+      <OrdersTableClient
+        orders={orders}
+        total={total}
+        page={page}
+        limit={PAGE_SIZE}
+        initialSearch={search ?? ""}
+        initialStatus={status ?? "ALL"}
+      />
     </div>
   );
 }

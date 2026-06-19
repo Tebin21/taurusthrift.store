@@ -135,6 +135,7 @@ model Order {
   @@index([status])
   @@index([createdAt])
   @@index([status, completedAt])
+  @@index([couponId])
   @@map("orders")
 }
 
@@ -155,6 +156,7 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
+  @@index([variantId])
   @@map("order_items")
 }
 

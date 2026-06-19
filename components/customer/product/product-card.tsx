@@ -17,10 +17,11 @@ type Props = {
 
 export const ProductCard = memo(function ProductCard({ product }: Props) {
   const locale = useLocale();
-  const { toggle, has } = useFavoritesStore();
+  const toggle = useFavoritesStore((s) => s.toggle);
+  const isInFavorites = useFavoritesStore((s) => s.items.includes(product.id));
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const isFavorited = mounted && has(product.id);
+  const isFavorited = mounted && isInFavorites;
 
   const localizedName =
     (locale === "ku" ? product.nameKu : locale === "ar" ? product.nameAr : null) ?? product.name;

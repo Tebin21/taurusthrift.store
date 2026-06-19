@@ -160,7 +160,11 @@
       "Bash(kill 81127 81128 81184)",
       "Bash(rm -rf .next)",
       "Bash(timeout 60 bash -c 'until curl -sf http://localhost:3000 -o /dev/null; do sleep 1; done')",
-      "Bash(node favorites-test-rtl.js)"
+      "Bash(node favorites-test-rtl.js)",
+      "Bash(git checkout *)",
+      "Bash(git stash *)",
+      "Bash(cp /tmp/get-ids.ts ./get-ids-tmp.ts)",
+      "Bash(rm -f ./get-ids-tmp.ts)"
     ],
     "additionalDirectories": [
       "/private/tmp"

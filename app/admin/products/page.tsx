@@ -3,29 +3,44 @@ import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2, Package } from "lucide-react";
+import { Plus, Pencil, Trash2, Package, ChevronLeft, ChevronRight } from "lucide-react";
 import { formatPrice } from "@/lib/utils/currency";
 import { DeleteProductButton } from "@/components/admin/products/delete-product-button";
 
 export const metadata = { title: "Products" };
 
-export default async function AdminProductsPage() {
+const PAGE_SIZE = 20;
+
+export default async function AdminProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
   const t = await getTranslations("products");
   const tCommon = await getTranslations("common");
-  const products = await prisma.product.findMany({
-    include: {
-      categories: { select: { name: true }, take: 1 },
-      variants: { select: { stock: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
+
+  const [totalCount, products] = await Promise.all([
+    prisma.product.count(),
+    prisma.product.findMany({
+      include: {
+        categories: { select: { name: true }, take: 1 },
+        variants: { select: { stock: true } },
+      },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    }),
+  ]);
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">{t("title")}</h1>
-          <p className="text-muted-foreground">{t("totalCount", { count: products.length })}</p>
+          <p className="text-muted-foreground">{t("totalCount", { count: totalCount })}</p>
         </div>
         <Button asChild className="bg-brand-brown hover:bg-brand-brown-dark text-white">
           <Link href="/admin/products/new">
@@ -108,6 +123,40 @@ export default async function AdminProductsPage() {
           </table>
         </div>
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2">
+          <Button variant="outline" size="icon" disabled={page <= 1} asChild={page > 1}>
+            {page > 1 ? (
+              <Link href={`/admin/products?page=${page - 1}`}>
+                <ChevronLeft className="h-4 w-4" />
+              </Link>
+            ) : (
+              <ChevronLeft className="h-4 w-4" />
+            )}
+          </Button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+            <Button
+              key={p}
+              variant={p === page ? "default" : "outline"}
+              size="icon"
+              asChild
+              className={p === page ? "bg-brand-brown hover:bg-brand-brown-dark" : ""}
+            >
+              <Link href={`/admin/products?page=${p}`}>{p}</Link>
+            </Button>
+          ))}
+          <Button variant="outline" size="icon" disabled={page >= totalPages} asChild={page < totalPages}>
+            {page < totalPages ? (
+              <Link href={`/admin/products?page=${page + 1}`}>
+                <ChevronRight className="h-4 w-4" />
+              </Link>
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

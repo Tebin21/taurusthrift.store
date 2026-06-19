@@ -265,6 +265,48 @@ const VisibilitySection = memo(function VisibilitySection({
   );
 });
 
+const VariantRow = memo(function VariantRow({
+  variant,
+  index,
+  onUpdate,
+  onRemove,
+  t,
+}: {
+  variant: Variant;
+  index: number;
+  onUpdate: (index: number, field: keyof Variant, value: string | number) => void;
+  onRemove: (index: number) => void;
+  t: ReturnType<typeof useTranslations>;
+}) {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-6 gap-2 items-end">
+      <div>
+        <Label className="text-xs">{t("size")}</Label>
+        <Input value={variant.size ?? ""} onChange={(e) => onUpdate(index, "size", e.target.value)} placeholder="M" className="mt-1 h-8 text-sm" />
+      </div>
+      <div>
+        <Label className="text-xs">{t("color")}</Label>
+        <Input value={variant.color ?? ""} onChange={(e) => onUpdate(index, "color", e.target.value)} placeholder={t("colorPlaceholder")} className="mt-1 h-8 text-sm" />
+      </div>
+      <div>
+        <Label className="text-xs">{t("colorHex")}</Label>
+        <Input value={variant.colorHex ?? ""} onChange={(e) => onUpdate(index, "colorHex", e.target.value)} placeholder="#000000" className="mt-1 h-8 text-sm" />
+      </div>
+      <div>
+        <Label className="text-xs">{t("sku")}</Label>
+        <Input value={variant.sku ?? ""} onChange={(e) => onUpdate(index, "sku", e.target.value)} placeholder="SKU-001" className="mt-1 h-8 text-sm" />
+      </div>
+      <div>
+        <Label className="text-xs">{t("stock")}</Label>
+        <Input type="number" value={variant.stock} onChange={(e) => onUpdate(index, "stock", parseInt(e.target.value) || 0)} className="mt-1 h-8 text-sm" />
+      </div>
+      <Button type="button" variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => onRemove(index)}>
+        <Trash2 className="h-3.5 w-3.5" />
+      </Button>
+    </div>
+  );
+});
+
 const VariantsSection = memo(function VariantsSection({
   variants,
   addVariant,
@@ -291,31 +333,7 @@ const VariantsSection = memo(function VariantsSection({
           <p className="text-sm text-muted-foreground">{t("noVariants")}</p>
         )}
         {variants.map((variant, i) => (
-          <div key={i} className="grid grid-cols-2 md:grid-cols-6 gap-2 items-end">
-            <div>
-              <Label className="text-xs">{t("size")}</Label>
-              <Input value={variant.size ?? ""} onChange={(e) => updateVariant(i, "size", e.target.value)} placeholder="M" className="mt-1 h-8 text-sm" />
-            </div>
-            <div>
-              <Label className="text-xs">{t("color")}</Label>
-              <Input value={variant.color ?? ""} onChange={(e) => updateVariant(i, "color", e.target.value)} placeholder={t("colorPlaceholder")} className="mt-1 h-8 text-sm" />
-            </div>
-            <div>
-              <Label className="text-xs">{t("colorHex")}</Label>
-              <Input value={variant.colorHex ?? ""} onChange={(e) => updateVariant(i, "colorHex", e.target.value)} placeholder="#000000" className="mt-1 h-8 text-sm" />
-            </div>
-            <div>
-              <Label className="text-xs">{t("sku")}</Label>
-              <Input value={variant.sku ?? ""} onChange={(e) => updateVariant(i, "sku", e.target.value)} placeholder="SKU-001" className="mt-1 h-8 text-sm" />
-            </div>
-            <div>
-              <Label className="text-xs">{t("stock")}</Label>
-              <Input type="number" value={variant.stock} onChange={(e) => updateVariant(i, "stock", parseInt(e.target.value) || 0)} className="mt-1 h-8 text-sm" />
-            </div>
-            <Button type="button" variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => removeVariant(i)}>
-              <Trash2 className="h-3.5 w-3.5" />
-            </Button>
-          </div>
+          <VariantRow key={i} variant={variant} index={i} onUpdate={updateVariant} onRemove={removeVariant} t={t} />
         ))}
       </CardContent>
     </Card>

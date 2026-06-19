@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 
@@ -40,6 +41,8 @@ export async function PUT(
       data: body,
     });
 
+    revalidateTag("categories", { expire: 0 });
+
     return NextResponse.json({ success: true, data: category });
   } catch (error) {
     console.error("[PUT /api/categories/[id]]", error);
@@ -57,6 +60,8 @@ export async function DELETE(
 
     const { id } = await params;
     await prisma.category.delete({ where: { id } });
+
+    revalidateTag("categories", { expire: 0 });
 
     return NextResponse.json({ success: true, message: "Category deleted" });
   } catch (error) {

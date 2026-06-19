@@ -1,27 +1,18 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { OrderStatusSelect } from "./order-status-select";
 import { MarkDoneButton } from "./mark-done-button";
-import { Search, Download, X } from "lucide-react";
+import { Search, Download, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { formatPrice } from "@/lib/utils/currency";
 
 const STATUS_OPTIONS = ["ALL", "PENDING", "CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED", "REFUNDED"];
-
-const STATUS_COLORS: Record<string, string> = {
-  PENDING: "bg-yellow-500/15 text-yellow-400 ring-1 ring-yellow-500/20",
-  CONFIRMED: "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/20",
-  PROCESSING: "bg-purple-500/15 text-purple-400 ring-1 ring-purple-500/20",
-  SHIPPED: "bg-indigo-500/15 text-indigo-400 ring-1 ring-indigo-500/20",
-  DELIVERED: "bg-green-500/15 text-green-400 ring-1 ring-green-500/20",
-  CANCELLED: "bg-red-500/15 text-red-400 ring-1 ring-red-500/20",
-  REFUNDED: "bg-white/8 text-white/50 ring-1 ring-white/12",
-};
 
 type Order = {
   id: string;
@@ -34,43 +25,84 @@ type Order = {
   itemCount: number;
 };
 
-export function OrdersTableClient({ orders }: { orders: Order[] }) {
+type Props = {
+  orders: Order[];
+  total: number;
+  page: number;
+  limit: number;
+  initialSearch: string;
+  initialStatus: string;
+};
+
+export function OrdersTableClient({ orders, total, page, limit, initialSearch, initialStatus }: Props) {
   const t = useTranslations("orders");
   const tCommon = useTranslations("common");
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("ALL");
+  const router = useRouter();
+  const pathname = usePathname();
+  const [search, setSearch] = useState(initialSearch);
+  const [statusFilter, setStatusFilter] = useState(initialStatus);
+  const [exporting, setExporting] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const totalPages = Math.max(1, Math.ceil(total / limit));
 
-  const filtered = useMemo(() => {
-    return orders.filter((o) => {
-      const matchesSearch =
-        !search ||
-        o.orderNumber.toLowerCase().includes(search.toLowerCase()) ||
-        o.customerName.toLowerCase().includes(search.toLowerCase()) ||
-        o.customerPhone.includes(search);
-      const matchesStatus = statusFilter === "ALL" || o.status === statusFilter;
-      return matchesSearch && matchesStatus;
-    });
-  }, [orders, search, statusFilter]);
+  const updateParams = useCallback(
+    (updates: Record<string, string | undefined>) => {
+      const url = new URL(window.location.href);
+      Object.entries(updates).forEach(([key, value]) => {
+        if (value) url.searchParams.set(key, value);
+        else url.searchParams.delete(key);
+      });
+      router.push(`${pathname}?${url.searchParams.toString()}`);
+    },
+    [pathname, router],
+  );
 
-  const exportCSV = () => {
-    const header = [t("csv.orderNumber"), t("csv.customer"), t("csv.phone"), t("csv.items"), t("csv.total"), t("csv.status"), t("csv.date")];
-    const rows = filtered.map((o) => [
-      o.orderNumber,
-      o.customerName,
-      o.customerPhone,
-      o.itemCount,
-      `${Number(o.total)} IQD`,
-      t(`statusLabels.${o.status}`),
-      new Date(o.createdAt).toLocaleDateString(),
-    ]);
-    const csv = [header, ...rows].map((r) => r.map((v) => `"${v}"`).join(",")).join("\n");
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `orders-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      updateParams({ search: search || undefined, page: undefined });
+    }, 350);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
+
+  const handleStatusChange = (value: string | null) => {
+    if (!value) return;
+    setStatusFilter(value);
+    updateParams({ status: value === "ALL" ? undefined : value, page: undefined });
+  };
+
+  const exportCSV = async () => {
+    setExporting(true);
+    try {
+      const params = new URLSearchParams();
+      if (search) params.set("search", search);
+      if (statusFilter !== "ALL") params.set("status", statusFilter);
+      const res = await fetch(`/api/admin/orders/export?${params.toString()}`);
+      const data = await res.json();
+      const allOrders: Order[] = data.success ? data.data : [];
+
+      const header = [t("csv.orderNumber"), t("csv.customer"), t("csv.phone"), t("csv.items"), t("csv.total"), t("csv.status"), t("csv.date")];
+      const rows = allOrders.map((o) => [
+        o.orderNumber,
+        o.customerName,
+        o.customerPhone,
+        o.itemCount,
+        `${Number(o.total)} IQD`,
+        t(`statusLabels.${o.status}`),
+        new Date(o.createdAt).toLocaleDateString(),
+      ]);
+      const csv = [header, ...rows].map((r) => r.map((v) => `"${v}"`).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `orders-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      setExporting(false);
+    }
   };
 
   return (
@@ -92,7 +124,7 @@ export function OrdersTableClient({ orders }: { orders: Order[] }) {
           )}
         </div>
 
-        <Select value={statusFilter} onValueChange={(v) => v && setStatusFilter(v)}>
+        <Select value={statusFilter} onValueChange={handleStatusChange}>
           <SelectTrigger className="h-9 w-40 text-xs">
             <SelectValue />
           </SelectTrigger>
@@ -103,13 +135,13 @@ export function OrdersTableClient({ orders }: { orders: Order[] }) {
           </SelectContent>
         </Select>
 
-        <Button variant="outline" size="sm" onClick={exportCSV} className="ms-auto shrink-0">
+        <Button variant="outline" size="sm" onClick={exportCSV} disabled={exporting} className="ms-auto shrink-0">
           <Download className="h-4 w-4 me-2" /> {t("exportCsv")}
         </Button>
       </div>
 
       <p className="text-sm text-muted-foreground">
-        {filtered.length} {tCommon("of")} {orders.length} {t("title")}
+        {total} {t("title")}
       </p>
 
       {/* Table */}
@@ -128,14 +160,14 @@ export function OrdersTableClient({ orders }: { orders: Order[] }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {filtered.length === 0 ? (
+              {orders.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-4 py-12 text-center text-muted-foreground">
                     {t("noMatch")}
                   </td>
                 </tr>
               ) : (
-                filtered.map((order) => (
+                orders.map((order) => (
                   <tr key={order.id} className="hover:bg-muted/30">
                     <td className="px-4 py-3">
                       <Link href={`/admin/orders/${order.id}`} className="font-medium hover:underline">
@@ -173,6 +205,48 @@ export function OrdersTableClient({ orders }: { orders: Order[] }) {
           </table>
         </div>
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2">
+          <Button variant="outline" size="icon" disabled={page <= 1} asChild={page > 1}>
+            {page > 1 ? (
+              <Link href={`${pathname}?${buildPageQuery(search, statusFilter, page - 1)}`}>
+                <ChevronLeft className="h-4 w-4" />
+              </Link>
+            ) : (
+              <ChevronLeft className="h-4 w-4" />
+            )}
+          </Button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+            <Button
+              key={p}
+              variant={p === page ? "default" : "outline"}
+              size="icon"
+              asChild
+              className={p === page ? "bg-brand-brown hover:bg-brand-brown-dark" : ""}
+            >
+              <Link href={`${pathname}?${buildPageQuery(search, statusFilter, p)}`}>{p}</Link>
+            </Button>
+          ))}
+          <Button variant="outline" size="icon" disabled={page >= totalPages} asChild={page < totalPages}>
+            {page < totalPages ? (
+              <Link href={`${pathname}?${buildPageQuery(search, statusFilter, page + 1)}`}>
+                <ChevronRight className="h-4 w-4" />
+              </Link>
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
+}
+
+function buildPageQuery(search: string, status: string, page: number) {
+  const params = new URLSearchParams();
+  if (search) params.set("search", search);
+  if (status !== "ALL") params.set("status", status);
+  params.set("page", String(page));
+  return params.toString();
 }

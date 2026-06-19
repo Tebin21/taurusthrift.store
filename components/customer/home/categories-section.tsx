@@ -8,6 +8,11 @@ import type { Category } from "@/types/product";
 
 type Props = { categories: Category[] };
 
+const fadeUpInitial = { opacity: 0, y: 20 };
+const fadeUpWhileInView = { opacity: 1, y: 0 };
+const viewportOnce = { once: true };
+const cardWhileHover = { y: -5 };
+
 export function CategoriesSection({ categories }: Props) {
   const t = useTranslations("home");
   const locale = useLocale();
@@ -20,9 +25,9 @@ export function CategoriesSection({ categories }: Props) {
       <div className="container mx-auto relative z-10">
         <motion.div
           className="text-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          initial={fadeUpInitial}
+          whileInView={fadeUpWhileInView}
+          viewport={viewportOnce}
         >
           <p className="text-xs font-semibold tracking-[0.28em] uppercase text-brand-brown dark:text-brand-accent mb-2">Browse</p>
           <h2
@@ -41,11 +46,11 @@ export function CategoriesSection({ categories }: Props) {
             return (
               <motion.div
                 key={cat.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                initial={fadeUpInitial}
+                whileInView={fadeUpWhileInView}
+                viewport={viewportOnce}
                 transition={{ delay: i * 0.06 }}
-                whileHover={{ y: -5 }}
+                whileHover={cardWhileHover}
               >
                 <Link
                   href={`/${locale}/category/${cat.slug}`}

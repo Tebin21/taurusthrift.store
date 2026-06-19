@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { serializeProduct } from "@/lib/utils";
+import { getProductBySlug } from "@/lib/data/products";
 import type { Product } from "@/types/product";
 import { ProductDetailClient } from "@/components/customer/product/product-detail-client";
 
@@ -22,10 +23,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
-  const product = await prisma.product.findUnique({
-    where: { slug },
-    include: { categories: { select: { name: true }, take: 1 } },
-  });
+  const product = await getProductBySlug(slug);
   if (!product) return { title: "Not Found" };
 
   const title = product.name;
@@ -60,13 +58,7 @@ export default async function ProductDetailPage({
 }) {
   const { locale, slug } = await params;
 
-  const product = await prisma.product.findUnique({
-    where: { slug, isActive: true },
-    include: {
-      categories: { select: { id: true, name: true, nameKu: true, nameAr: true, slug: true, imageUrl: true } },
-      variants: { orderBy: [{ size: "asc" }, { color: "asc" }] },
-    },
-  });
+  const product = await getProductBySlug(slug);
 
   if (!product) notFound();
 

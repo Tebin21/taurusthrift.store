@@ -1,8 +1,8 @@
-import { prisma } from "@/lib/prisma";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import Image from "next/image";
 import { Tag } from "lucide-react";
+import { getActiveCategoriesWithCounts } from "@/lib/data/categories";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -18,11 +18,7 @@ export default async function CategoriesPage({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "category" });
 
-  const categories = await prisma.category.findMany({
-    where: { isActive: true },
-    include: { _count: { select: { products: true } } },
-    orderBy: { sortOrder: "asc" },
-  });
+  const categories = await getActiveCategoriesWithCounts();
 
   return (
     <div className="container mx-auto px-4 py-12">

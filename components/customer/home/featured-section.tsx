@@ -9,6 +9,12 @@ import { ArrowRight } from "lucide-react";
 
 type Props = { products: Product[] };
 
+const headerInitial = { opacity: 0, x: -20 };
+const headerWhileInView = { opacity: 1, x: 0 };
+const viewportOnce = { once: true };
+const cardInitial = { opacity: 0, scale: 0.95 };
+const cardWhileInView = { opacity: 1, scale: 1 };
+
 export function FeaturedSection({ products }: Props) {
   const t = useTranslations("home");
   const locale = useLocale();
@@ -20,9 +26,9 @@ export function FeaturedSection({ products }: Props) {
       <div className="container mx-auto relative z-10">
         <div className="flex items-end justify-between mb-10">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            initial={headerInitial}
+            whileInView={headerWhileInView}
+            viewport={viewportOnce}
           >
             <p className="text-xs font-semibold tracking-[0.25em] uppercase text-brand-brown dark:text-brand-accent mb-2 pb-1 border-b border-brand-brown/30 dark:border-brand-accent/40 inline-block">
               Curated
@@ -33,7 +39,6 @@ export function FeaturedSection({ products }: Props) {
             >
               {t("featured")}
             </h2>
-            <p className="text-muted-foreground mt-1.5">{t("featuredSubtitle")}</p>
           </motion.div>
           <Link
             href={`/${locale}/products?featured=true`}
@@ -47,9 +52,9 @@ export function FeaturedSection({ products }: Props) {
           {products.map((product, i) => (
             <motion.div
               key={product.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
+              initial={cardInitial}
+              whileInView={cardWhileInView}
+              viewport={viewportOnce}
               transition={{ duration: 0.4, delay: i * 0.08 }}
             >
               <ProductCard product={product} />
